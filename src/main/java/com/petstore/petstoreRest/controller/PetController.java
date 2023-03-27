@@ -88,8 +88,9 @@ public class PetController {
     @RequestMapping(value = "/pet/{petId}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deletePetById(@PathVariable Long petId) {
         checkId(petId);
-        checkIfEmpty(petService.findById(petId));
-        petService.deletePetById(petId);
+        Pet petForDelete = petService.findById(petId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        petService.deletePet(petForDelete);
         return ResponseEntity.noContent().build();
     }
 

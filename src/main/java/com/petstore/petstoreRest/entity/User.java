@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private long id;
+    private Long id;
     @NotBlank(message = "UserName is required")
     @Column(unique = true)
     private String userName;
@@ -32,5 +32,5 @@ public class User {
     @NotBlank(message = "Phone is required")
 
     private String phone;
-    private int userStatus;
+    private Integer userStatus;
 }

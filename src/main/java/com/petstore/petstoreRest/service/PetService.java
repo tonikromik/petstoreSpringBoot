@@ -16,7 +16,5 @@ public interface PetService {
 
     void updatePetInTheStoreById(Long petId, String name, Pet.Status status);
 
-    void deletePetById(Long id);
-
-    //    void uploadImageByPetId(Long id, String url);
+    void deletePet(Pet pet);
 }
