@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,7 +21,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
-        return userRepository.save(user);
+        if (findByUsernameWithoutException(user.getUserName()).isEmpty()){
+            return userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with such username already exist");
+        }
+    }
+
+    @Override
+    public Optional<User> findByUsernameWithoutException(String username) {
+        return userRepository.findByUserName(username);
     }
 
     @Override

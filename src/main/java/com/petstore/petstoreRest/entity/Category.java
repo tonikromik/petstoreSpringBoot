@@ -19,4 +19,8 @@ public class Category {
     private Long id;
     @NotBlank(message = "Category name is required")
     private String name;
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

@@ -1,6 +1,8 @@
 package com.petstore.petstoreRest.service.impl;
 
+import com.petstore.petstoreRest.entity.Category;
 import com.petstore.petstoreRest.entity.Pet;
+import com.petstore.petstoreRest.repository.CategoryRepository;
 import com.petstore.petstoreRest.repository.PetRepository;
 import com.petstore.petstoreRest.service.PetService;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
+    private final CategoryRepository categoryRepository;
 
-    public PetServiceImpl(PetRepository petRepository) {
+    public PetServiceImpl(PetRepository petRepository, CategoryRepository categoryRepository) {
         this.petRepository = petRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -31,6 +35,12 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet savePet(Pet pet) {
+        Category existedCategory = categoryRepository.findByName(pet.getCategory().getName().toLowerCase());
+        if (existedCategory != null){
+            pet.setCategory(existedCategory);
+        } else {
+            pet.setCategory(new Category(pet.getCategory().getName().toLowerCase()));
+        }
         pet.setStatus(Pet.Status.AVAILABLE);
         petRepository.save(pet);
         return pet;
@@ -41,7 +51,14 @@ public class PetServiceImpl implements PetService {
         Pet currentPet = petRepository.findById(petId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (pet.getName() != null) currentPet.setName(pet.getName());
-        if (pet.getCategory() != null) currentPet.setCategory(pet.getCategory());
+        if (pet.getCategory() != null) {
+            Category existedCategory = categoryRepository.findByName(pet.getCategory().getName().toLowerCase());
+            if (existedCategory != null){
+                pet.setCategory(existedCategory);
+            } else {
+                pet.setCategory(new Category(pet.getCategory().getName().toLowerCase()));
+            }
+        }
         if (pet.getPhotoUrl() != null) currentPet.setPhotoUrl(pet.getPhotoUrl());
         if (pet.getTag() != null) currentPet.setTag(pet.getTag());
         if (pet.getStatus() != null) currentPet.setStatus(pet.getStatus());
