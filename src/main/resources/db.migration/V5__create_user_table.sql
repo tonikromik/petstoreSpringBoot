@@ -1,7 +1,6 @@
-create table user
+create table IF NOT EXISTS user
 (
-    id          bigint auto_increment
-        primary key,
+    id          bigint auto_increment primary key,
     email       varchar(255) null,
     first_name  varchar(255) null,
     last_name   varchar(255) null,

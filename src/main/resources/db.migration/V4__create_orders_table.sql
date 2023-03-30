@@ -1,10 +1,9 @@
-create table orders
+create table IF NOT EXISTS orders
 (
-    id        bigint auto_increment
-        primary key,
-    complete  bit          null,
-    pet_id    bigint       null,
-    quantity  int          null,
+    id        bigint auto_increment primary key,
+    complete  boolean null,
+    pet_id    bigint null,
+    quantity  int null,
     ship_date varchar(255) null,
     status    varchar(255) null
 );

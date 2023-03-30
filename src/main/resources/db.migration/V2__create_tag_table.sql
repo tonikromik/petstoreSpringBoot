@@ -1,4 +1,4 @@
-create table tag
+create table IF NOT EXISTS tag
 (
     id       bigint auto_increment
         primary key,

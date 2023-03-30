@@ -1,4 +1,4 @@
-create table pet
+create table IF NOT EXISTS pet
 (
     id          bigint auto_increment
         primary key,

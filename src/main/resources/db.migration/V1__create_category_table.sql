@@ -1,4 +1,4 @@
-create table category
+create table IF NOT EXISTS category
 (
     id   bigint auto_increment
         primary key,
