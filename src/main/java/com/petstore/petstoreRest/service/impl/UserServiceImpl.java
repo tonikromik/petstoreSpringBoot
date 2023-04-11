@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
-        if (findByUsernameWithoutException(user.getUserName()).isEmpty()){
+        if (!findByUsernameWithoutException(user.getUserName()).isPresent()){
             return userRepository.save(user);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with such username already exist");

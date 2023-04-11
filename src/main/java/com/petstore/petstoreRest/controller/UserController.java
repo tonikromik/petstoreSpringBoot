@@ -1,8 +1,11 @@
 package com.petstore.petstoreRest.controller;
 
+import com.petstore.petstoreRest.dto.UserDTO;
 import com.petstore.petstoreRest.entity.User;
+import com.petstore.petstoreRest.mapper.UserMapper;
 import com.petstore.petstoreRest.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,63 +13,64 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+    @PostMapping("/user")
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
         checkIfValid(bindingResult);
-        User savedUser = userService.saveUser(user);
-        Long savedUserId = savedUser.getId();
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{userId}")
-                .buildAndExpand(savedUserId)
-                .toUri();
-        return ResponseEntity.created(location).build();
-    }
-
-    @RequestMapping(value = "/user/createWithList", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUserWithList(@Valid @RequestBody List<@Valid User> userList, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        userService.saveAllUsers(userList);
+        User savedUser = userService.saveUser(UserMapper.INSTANCE.toUser(userDTO));
+//        Long savedUserId = savedUser.getId();
+//        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+//                .path("/{userId}")
+//                .buildAndExpand(savedUserId)
+//                .toUri();
+//        return ResponseEntity.created(location).build();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @RequestMapping("/user/{username}")
-    public User findUserByUsername(@PathVariable String username) {
+    @PostMapping( "/user/createWithList")
+    public ResponseEntity<Void> createUserWithList(@Valid @RequestBody List<UserDTO> userDTOList, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        List<User> users = new ArrayList<>();
+        for (UserDTO userDTO : userDTOList) {
+            users.add(UserMapper.INSTANCE.toUser(userDTO));
+        }
+        userService.saveAllUsers(users);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/user/{username}")
+    public UserDTO findUserByUsername(@PathVariable String username) {
         if (isValidUsername(username)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username supplied");
         }
-        return userService.findByUsername(username);
+        return UserMapper.INSTANCE.toDTO(userService.findByUsername(username));
     }
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.PUT)
+    @PutMapping("/user/{username}")
     public ResponseEntity<Void> updateUserByUsername(@PathVariable String username,
-                                                     @RequestBody User user,
+                                                     @RequestBody UserDTO userDTO,
                                                      BindingResult bindingResult) {
         if (isValidUsername(username) && !username.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username supplied");
         }
         checkIfValid(bindingResult);
-        userService.findByUsername(username);
-        userService.updateUser(username, user);
+        userService.updateUser(username, UserMapper.INSTANCE.toUser(userDTO));
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.DELETE)
+    @DeleteMapping("/user/{username}")
     public ResponseEntity<Void> deleteUserByUsername(@PathVariable String username) {
         if (isValidUsername(username) && !username.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username supplied");

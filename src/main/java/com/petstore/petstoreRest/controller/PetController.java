@@ -103,7 +103,7 @@ public class PetController {
 
     //  404 Not found
     private void checkIfEmpty(Optional<Pet> optionalPet) {
-        if (optionalPet.isEmpty()) {
+        if (!optionalPet.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
