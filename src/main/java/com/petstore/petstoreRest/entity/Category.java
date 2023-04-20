@@ -14,7 +14,6 @@ import lombok.*;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
     private Long id;
     @NotBlank(message = "Category name is required")
     private String name;

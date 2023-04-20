@@ -15,7 +15,6 @@ import static jakarta.persistence.EnumType.STRING;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
     private Long id;
 
     @NotBlank(message = "Name is required")

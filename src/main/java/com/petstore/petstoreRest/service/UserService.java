@@ -1,18 +1,17 @@
 package com.petstore.petstoreRest.service;
 
-import com.petstore.petstoreRest.entity.User;
+import com.petstore.petstoreRest.dto.UserDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
-    User saveUser(User user);
+    UserDTO saveUser(UserDTO userDTO);
 
-    User findByUsername(String username);
-    Optional<User> findByUsernameWithoutException(String username);
+    UserDTO findByUsername(String username);
 
-    void updateUser(String username, User user);
-    void deleteUser(User user);
+    void updateUser(String username, UserDTO userDTO);
 
-    void saveAllUsers(List<User> users);
+    void deleteUser(String username);
+
+    void saveAllUsers(List<UserDTO> usersDTO);
 }
