@@ -1,13 +1,14 @@
 package com.petstore.petstoreRest.service.impl;
 
 import com.petstore.petstoreRest.dto.UserDTO;
-import com.petstore.petstoreRest.exception.UserAlreadyExistException;
 import com.petstore.petstoreRest.mapper.UserMapper;
 import com.petstore.petstoreRest.repository.UserRepository;
 import com.petstore.petstoreRest.service.UserService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +24,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private static final String USER_NOT_FOUND = "User with username '%s' not found.";
+    private static final String USER_ALREADY_EXIST = "User with username '%s' already exist.";
+    private static final String SOME_USER_ALREADY_EXIST = "Some user already exist.";
+
     /**
      * {@inheritDoc}
      */
     @Override
     public UserDTO findByUsername(String username) {
         return userMapper.toDTO(userRepository.findByUserName(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with username \"" + username + "\" not found")));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(USER_NOT_FOUND, username))));
     }
 
     /**
@@ -40,7 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
         } catch (DataAccessException e) {
-            throw new UserAlreadyExistException("User already exist");
+            throw new EntityExistsException(String.format(USER_ALREADY_EXIST, userDTO.getUserName()));
         }
     }
 
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String username, UserDTO userDTO) {
         var currentUser = userRepository.findByUserName(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with username \"" + username + "\" not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(USER_NOT_FOUND, username)));
 
         userMapper.updateProperties(userDTO, currentUser);
         userRepository.save(currentUser);
@@ -62,18 +67,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String username) {
         userRepository.delete(userRepository.findByUserName(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with username \"" + username + "\" not found")));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(USER_NOT_FOUND, username))));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createAll(List<UserDTO> usersDTOs) {
+    public void createAll(List<UserDTO> usersDTOs){
         try {
             userRepository.saveAll(userMapper.toEntities(usersDTOs));
-        } catch (DataAccessException e) {
-            throw new UserAlreadyExistException("Some user already exist");
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(SOME_USER_ALREADY_EXIST);
         }
     }
 }

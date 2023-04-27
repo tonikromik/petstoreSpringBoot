@@ -2,10 +2,10 @@ package com.petstore.petstoreRest.service;
 
 import com.petstore.petstoreRest.dto.UserDTO;
 import com.petstore.petstoreRest.entity.User;
-import com.petstore.petstoreRest.exception.UserAlreadyExistException;
 import com.petstore.petstoreRest.mapper.UserMapper;
 import com.petstore.petstoreRest.repository.UserRepository;
 import com.petstore.petstoreRest.service.impl.UserServiceImpl;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,22 +39,10 @@ public class UserServiceImplTest {
 
     @BeforeEach
     public void init() {
-        user = new User(1L, "user", "first", "last",
-                "email@gmail.com", "password", "+380970000001", 1);
-        User user2 = new User(2L, "user2", "first2", "last2",
-                "email2@gmail.com", "password2", "+380970000002", 1);
-        userDTO = new UserDTO(1L, "user", "first", "last",
-                "email@gmail.com", "password", "+380970000001", 1);
-        UserDTO userDTO2 = new UserDTO(2L, "user2", "first2", "last2",
-                "email2@gmail.com", "password2", "+380970000002", 1);
-
-        userDTOs = new ArrayList<>();
-        userDTOs.add(userDTO);
-        userDTOs.add(userDTO2);
-
-        users = new ArrayList<>();
-        users.add(user);
-        users.add(user2);
+        user = UserServiceTestFactory.user;
+        userDTO = UserServiceTestFactory.userDTO;
+        users = UserServiceTestFactory.users;
+        userDTOs = UserServiceTestFactory.userDTOs;
     }
 
     @Test
@@ -84,17 +71,18 @@ public class UserServiceImplTest {
 
         UserDTO returnedUserDTO = userServiceImpl.createUser(userDTO);
 
-        assertNotNull(returnedUserDTO);
+//        assertNotNull(returnedUserDTO);
+        assertEquals(userDTO, returnedUserDTO);
         verify(userRepository, times(1)).save(user);
     }
 
 
     @Test
-    public void createUser_ThrowUserAlreadyExistException() {
-        when(userRepository.save(any(User.class))).thenThrow(new UserAlreadyExistException("User already exist"));
+    public void createUser_ThrowEntityExistsException() {
+        when(userRepository.save(any(User.class))).thenThrow(new EntityExistsException());
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
 
-        assertThrows(UserAlreadyExistException.class, () -> userServiceImpl.createUser(userDTO));
+        assertThrows(EntityExistsException.class, () -> userServiceImpl.createUser(userDTO));
     }
 
     @Test
@@ -141,9 +129,9 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void saveAllUsers_ThrowUserAlreadyExistException() {
-        when(userRepository.saveAll(anyList())).thenThrow(new UserAlreadyExistException("Some user already exist"));
+    public void saveAllUsers_ThrowEntityExistsException() {
+        when(userRepository.saveAll(anyList())).thenThrow(new EntityExistsException());
 
-        assertThrows(UserAlreadyExistException.class, () -> userServiceImpl.createAll(userDTOs));
+        assertThrows(EntityExistsException.class, () -> userServiceImpl.createAll(userDTOs));
     }
 }

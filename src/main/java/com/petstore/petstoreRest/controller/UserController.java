@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping("/user")
     @ResponseStatus(CREATED)
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
 
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{username}")
-    public void updateUser(@PathVariable String username, @RequestBody UserDTO userDTO) {
+    public void updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
         userService.updateUser(username, userDTO);
     }
 
