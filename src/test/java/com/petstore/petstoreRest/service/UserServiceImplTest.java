@@ -5,16 +5,15 @@ import com.petstore.petstoreRest.entity.User;
 import com.petstore.petstoreRest.mapper.UserMapper;
 import com.petstore.petstoreRest.repository.UserRepository;
 import com.petstore.petstoreRest.service.impl.UserServiceImpl;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,19 +34,15 @@ public class UserServiceImplTest {
 
     private User user;
     private UserDTO userDTO;
+    private List<User> users;
     private List<UserDTO> userDTOs;
 
     @BeforeEach
     public void init() {
-        user = new User(1L, "user", "first", "last",
-                "email@gmail.com", "password", "+380970000001", 1);
-        userDTO = new UserDTO(1L, "user", "first", "last",
-                "email@gmail.com", "password", "+380970000001", 1);
-        UserDTO userDTO2 = new UserDTO(2L, "user2", "first2", "last2",
-                "email2@gmail.com", "password2", "+380970000002", 1);
-        userDTOs = new ArrayList<>();
-        userDTOs.add(userDTO);
-        userDTOs.add(userDTO2);
+        user = UserServiceTestFactory.user;
+        userDTO = UserServiceTestFactory.userDTO;
+        users = UserServiceTestFactory.users;
+        userDTOs = UserServiceTestFactory.userDTOs;
     }
 
     @Test
@@ -62,35 +57,36 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByUsername_ThrowResponseStatusException() {
-        when(userRepository.findByUserName(anyString())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void findByUsername_ThrowEntityNotFoundException() {
+        when(userRepository.findByUserName(anyString())).thenThrow(new EntityNotFoundException());
 
-        assertThrows(ResponseStatusException.class, () -> userServiceImpl.findByUsername("user"));
+        assertThrows(EntityNotFoundException.class, () -> userServiceImpl.findByUsername("user"));
     }
 
     @Test
-    public void saveUser_ReturnUserDTO() {
-        when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
+    public void createUser_ReturnUserDTO() {
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
 
-        UserDTO returnedUserDTO = userServiceImpl.saveUser(userDTO);
+        UserDTO returnedUserDTO = userServiceImpl.createUser(userDTO);
 
-        assertNotNull(returnedUserDTO);
+//        assertNotNull(returnedUserDTO);
+        assertEquals(userDTO, returnedUserDTO);
         verify(userRepository, times(1)).save(user);
     }
 
 
     @Test
-    public void saveUser_ThrowResponseStatusException() {
-        when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
+    public void createUser_ThrowEntityExistsException() {
+        when(userRepository.save(any(User.class))).thenThrow(new EntityExistsException());
+        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
 
-        assertThrows(ResponseStatusException.class, () -> userServiceImpl.saveUser(userDTO));
+        assertThrows(EntityExistsException.class, () -> userServiceImpl.createUser(userDTO));
     }
 
     @Test
-    public void updateUser_ReturnVoid(){
+    public void updateUser_ReturnVoid() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -100,43 +96,42 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateUser_ThrowResponseStatusException(){
+    public void updateUser_ThrowEntityNotFoundException() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> userServiceImpl.updateUser(anyString(), userDTO));
+        assertThrows(EntityNotFoundException.class, () -> userServiceImpl.updateUser(anyString(), userDTO));
     }
 
     @Test
-    public void deleteUser_ReturnVoid(){
+    public void deleteUser_ReturnVoid() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
         doNothing().when(userRepository).delete(user);
 
-        assertAll(()-> userServiceImpl.deleteUser("user"));
+        assertAll(() -> userServiceImpl.deleteUser("user"));
         verify(userRepository, times(1)).delete(user);
     }
 
     @Test
-    public void deleteUser_ThrowResponseStatusException(){
+    public void deleteUser_ThrowEntityNotFoundException() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> userServiceImpl.deleteUser(anyString()));
+        assertThrows(EntityNotFoundException.class, () -> userServiceImpl.deleteUser(anyString()));
     }
 
     @Test
-    public void saveAllUsers_ReturnVoid(){
-        when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
+    public void createAll_ReturnVoid() {
+        when(userRepository.saveAll(anyList())).thenReturn(users);
+        when(userMapper.toEntities(userDTOs)).thenReturn(users);
 
-        userServiceImpl.saveAllUsers(userDTOs);
+        userServiceImpl.createAll(userDTOs);
 
-        verify(userRepository, times(2)).save(any(User.class));
+        verify(userRepository, times(1)).saveAll(users);
     }
 
     @Test
-    public void saveAllUsers_ThrowResponseStatusException(){
-        when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
+    public void saveAllUsers_ThrowEntityExistsException() {
+        when(userRepository.saveAll(anyList())).thenThrow(new EntityExistsException());
 
-        assertThrows(ResponseStatusException.class, () -> userServiceImpl.saveAllUsers(userDTOs));
+        assertThrows(EntityExistsException.class, () -> userServiceImpl.createAll(userDTOs));
     }
 }
