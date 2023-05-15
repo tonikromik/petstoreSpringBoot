@@ -1,22 +1,31 @@
 package com.petstore.petstoreRest.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
-public class Category {
+public class Category extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_seq")
+    @SequenceGenerator(name = "categories_seq", sequenceName = "categories_seq", initialValue = 4)
     private Long id;
-    @NotBlank(message = "Category name is required")
+
+    @Column(name = "category_name", nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
+    private List<Pet> pets = new ArrayList<>();
 
     public Category(String name) {
         this.name = name;

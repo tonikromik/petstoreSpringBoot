@@ -1,9 +1,10 @@
 package com.petstore.petstoreRest.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 
@@ -12,31 +13,36 @@ import static jakarta.persistence.EnumType.STRING;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Pet {
+@Table(name = "pets")
+public class Pet extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pets_seq")
+    @SequenceGenerator(name = "pets_seq", sequenceName = "pets_seq", initialValue = 8)
     private Long id;
 
-    @NotBlank(message = "Name is required")
+    @Column(name = "pet_name", nullable = false)
     private String name;
 
-    @NotNull(message = "Category is required")
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @NotBlank(message = "PhotoUrl is required")
-    private String photoUrl;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = "pet_urls")
+    private List<String> photoUrls = new ArrayList<>();
 
-    @NotNull(message = "Tag is required")
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JoinColumn(name = "tag_id", referencedColumnName = "id")
-    private Tag tag;
+    @Setter(AccessLevel.PRIVATE)
+    @ManyToMany
+    @JoinTable(
+            name = "pets_tags",
+            joinColumns = @JoinColumn(name = "pet_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>();
 
     @Enumerated(STRING)
-    private Status status;
+    @Column(name = "pet_status", nullable = false)
+    private Status status = Status.AVAILABLE;
 
     public enum Status {
         AVAILABLE,

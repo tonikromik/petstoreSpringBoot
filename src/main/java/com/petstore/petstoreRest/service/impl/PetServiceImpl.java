@@ -1,81 +1,124 @@
 package com.petstore.petstoreRest.service.impl;
 
-import com.petstore.petstoreRest.entity.Category;
+import com.petstore.petstoreRest.dto.PetDTO;
 import com.petstore.petstoreRest.entity.Pet;
+import com.petstore.petstoreRest.entity.Tag;
+import com.petstore.petstoreRest.mapper.PetMapper;
+import com.petstore.petstoreRest.mapper.TagMapper;
 import com.petstore.petstoreRest.repository.CategoryRepository;
 import com.petstore.petstoreRest.repository.PetRepository;
+import com.petstore.petstoreRest.repository.TagRepository;
 import com.petstore.petstoreRest.service.PetService;
-import org.springframework.http.HttpStatus;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * This implementation of {@link PetService} provides methods for managing pets.
+ */
 @Service
+@RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
+    private final PetMapper petMapper;
+    private final TagMapper tagMapper;
+    private static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
+    private static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
+    private static final String TAG_NOT_FOUND = "Tag with id '%d' not found.";
+    private static final String INVALID_VALUE = "Invalid status value";
 
-    public PetServiceImpl(PetRepository petRepository, CategoryRepository categoryRepository) {
-        this.petRepository = petRepository;
-        this.categoryRepository = categoryRepository;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PetDTO findById(Long id) {
+        return petMapper.toDTO(petRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(PET_NOT_FOUND, id))));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Optional<Pet> findById(Long id) {
-        return petRepository.findById(id);
-    }
-
-    @Override
-    public List<Pet> findPetsByStatus(Pet.Status status) {
-        return petRepository.findAllByStatus(status);
-    }
-
-    @Override
-    public Pet savePet(Pet pet) {
-        Category existedCategory = categoryRepository.findByName(pet.getCategory().getName().toLowerCase());
-        if (existedCategory != null){
-            pet.setCategory(existedCategory);
-        } else {
-            pet.setCategory(new Category(pet.getCategory().getName().toLowerCase()));
+    public List<PetDTO> findPetsByStatus(String status) {
+        try {
+            return petMapper.toListDTOs(petRepository.findAllByStatus(Pet.Status.valueOf(status.toUpperCase())));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(INVALID_VALUE);
         }
-        pet.setStatus(Pet.Status.AVAILABLE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public PetDTO addPet(PetDTO petDTO) {
+        var pet = petMapper.toEntity(petDTO);
+        var category = categoryRepository.findById(pet.getCategory().getId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format(CATEGORY_NOT_FOUND, pet.getCategory().getId())));
+        pet.setCategory(category);
+        List<Tag> tags = tagMapper.toListEntities(petDTO.getTags());
+        for (var t : tags) {
+            var tag = tagRepository.findById(t.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(String.format(TAG_NOT_FOUND, t.getId())));
+            tag.assignPet(pet);
+        }
+
+        return petMapper.toDTO(petRepository.save(pet));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public void updatePet(PetDTO petDTO) {
+        var pet = petRepository.findById(petDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format(PET_NOT_FOUND, petDTO.getId())));
+
+        pet.getTags().clear();
+
+        var tags = tagMapper.toListEntities(petDTO.getTags());
+        for (var tag : tags) {
+            tag.assignPet(pet);
+        }
+
+        petMapper.updateProperties(petDTO, pet);
         petRepository.save(pet);
-        return pet;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
-    public void updatePet(Long petId, Pet pet) {
-        Pet currentPet = petRepository.findById(petId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (pet.getName() != null) currentPet.setName(pet.getName());
-        if (pet.getCategory() != null) {
-            Category existedCategory = categoryRepository.findByName(pet.getCategory().getName().toLowerCase());
-            if (existedCategory != null){
-                pet.setCategory(existedCategory);
-            } else {
-                pet.setCategory(new Category(pet.getCategory().getName().toLowerCase()));
-            }
+    public void updatePetInTheStoreById(Long id, String name, String status) {
+        Pet petForUpdate = petRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(PET_NOT_FOUND, id)));
+
+        if (name != null) {
+            petForUpdate.setName(name);
         }
-        if (pet.getPhotoUrl() != null) currentPet.setPhotoUrl(pet.getPhotoUrl());
-        if (pet.getTag() != null) currentPet.setTag(pet.getTag());
-        if (pet.getStatus() != null) currentPet.setStatus(pet.getStatus());
-        petRepository.save(currentPet);
-    }
-
-    @Override
-    public void updatePetInTheStoreById(Long petId, String name, Pet.Status status) {
-        Pet petForUpdate = petRepository.findById(petId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        petForUpdate.setName(name);
-        petForUpdate.setStatus(status);
+        if (status != null) {
+            petForUpdate.setStatus(Pet.Status.valueOf(status.toUpperCase()));
+        }
         petRepository.save(petForUpdate);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
-    public void deletePet(Pet pet) {
-        petRepository.delete(pet);
+    public void deletePet(Long id) {
+        petRepository.delete(petRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(PET_NOT_FOUND, id))));
     }
 }

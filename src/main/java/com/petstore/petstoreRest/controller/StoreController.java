@@ -2,68 +2,35 @@ package com.petstore.petstoreRest.controller;
 
 import com.petstore.petstoreRest.dto.OrdersDTO;
 import com.petstore.petstoreRest.entity.Orders;
-import com.petstore.petstoreRest.service.OrdersService;
+import com.petstore.petstoreRest.mapper.OrdersMapper;
+import com.petstore.petstoreRest.service.StoreService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/store")
+@Validated
 public class StoreController {
 
-    private final OrdersService ordersService;
+    private final StoreService ordersService;
+    private final OrdersMapper ordersMapper;
 
-    public StoreController(OrdersService ordersService) {
-        this.ordersService = ordersService;
+    @PostMapping(value = "/order")
+    public OrdersDTO createOrder(@Valid @RequestBody OrdersDTO orderDTO) {
+        return ordersMapper.toDTO(ordersService.saveOrder(ordersMapper.toEntity(orderDTO)));
     }
 
-    @RequestMapping(value = "/store/order", method = RequestMethod.POST)
-    public ResponseEntity<String> createOrder(@Valid @RequestBody OrdersDTO orderDTO) {
-        try {
-            Orders.Status status = Orders.Status.valueOf(orderDTO.getStatus().toUpperCase());
-
-            Orders order = new Orders(orderDTO.getPetId(),
-                    orderDTO.getQuantity(),
-                    orderDTO.getShipDate(),
-                    status,
-                    orderDTO.getComplete());
-            Orders savedOrder = ordersService.saveOrder(order);
-            Long savedOrderId = savedOrder.getId();
-
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{orderId}")
-                    .buildAndExpand(savedOrderId)
-                    .toUri();
-            return ResponseEntity.created(location).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Invalid status value: " + orderDTO.getStatus());
-        }
+    @GetMapping(value = "/order/{orderId}")
+    public Orders findById(@PathVariable @Min(1) Long orderId) {
+        return ordersService.findById(orderId);
     }
 
-    @RequestMapping(value = "/store/order/{orderId}", method = RequestMethod.GET)
-    public Orders findById(@PathVariable Long orderId) {
-        checkId(orderId);
-        Orders order = ordersService.findById(orderId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return order;
-    }
-
-    @RequestMapping(value = "/store/order/{orderId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteById(@PathVariable Long orderId) {
-        checkId(orderId);
-        Orders order = ordersService.findById(orderId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        ordersService.delete(order);
-        return ResponseEntity.noContent().build();
-    }
-
-    private void checkId(Long id) {
-        if (id == null || id <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ID supplied");
-        }
+    @DeleteMapping(value = "/order/{orderId}")
+    public void deleteById(@PathVariable @Min(1) Long orderId) {
+        ordersService.delete(orderId);
     }
 }

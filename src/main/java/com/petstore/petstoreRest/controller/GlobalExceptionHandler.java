@@ -35,6 +35,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), NO_HEADERS, HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> IllegalArgumentException(
+            IllegalArgumentException ex,
+            WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), NO_HEADERS, HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), NO_HEADERS, HttpStatus.BAD_REQUEST, request);

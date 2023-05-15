@@ -1,13 +1,19 @@
 package com.petstore.petstoreRest.dto;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
-public class TagDTO {
+public class TagDTO extends BaseDTO{
 
+    @NotNull
     private Long id;
 
-    private String tagName;
+    @NotBlank
+    private String name;
 }

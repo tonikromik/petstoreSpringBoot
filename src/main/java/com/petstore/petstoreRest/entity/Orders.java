@@ -11,35 +11,34 @@ import static jakarta.persistence.EnumType.STRING;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Orders {
+@Table(name = "orders")
+public class Orders extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_seq")
+    @SequenceGenerator(name = "orders_seq", sequenceName = "orders_seq", initialValue = 5)
     private Long id;
 
+    @Column(name = "pet_id", nullable = false)
     private Long petId;
 
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @DateTimeFormat
+    @Column(name = "ship_date", nullable = false)
     private String shipDate;
 
     @Enumerated(STRING)
+    @Column(name = "order_status", nullable = false)
     private Status status;
 
+    @Column(name = "complete", nullable = false)
     private Boolean complete;
 
     public enum Status {
         PLACED,
         APPROVED,
         DELIVERED
-    }
-
-    public Orders(Long petId, int quantity, String shipDate, Status status, boolean complete) {
-        this.petId = petId;
-        this.quantity = quantity;
-        this.shipDate = shipDate;
-        this.status = status;
-        this.complete = complete;
     }
 }
 

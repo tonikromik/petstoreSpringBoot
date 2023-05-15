@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
-public class OrdersDTO {
+public class OrdersDTO extends BaseDTO{
 
     private Long id;
 
