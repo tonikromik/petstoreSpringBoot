@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category extends BaseEntity{
+public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categories_seq")
     @SequenceGenerator(name = "categories_seq", sequenceName = "categories_seq", initialValue = 4)
@@ -26,8 +26,4 @@ public class Category extends BaseEntity{
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
     private List<Pet> pets = new ArrayList<>();
-
-    public Category(String name) {
-        this.name = name;
-    }
 }

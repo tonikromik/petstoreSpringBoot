@@ -21,14 +21,6 @@ INSERT INTO categories (id, category_name) VALUES (3, 'fish');
 
 update categories_seq set next_val= 4 where next_val=1;
 
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (1, 'Cat1', 'url1', 'AVAILABLE', 1);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (2, 'Alisa', 'url2', 'PENDING', 1);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (3, 'Dina', 'url12345', 'AVAILABLE', 2);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (4, 'Nemo', 'url6', 'AVAILABLE', 3);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (5, 'Cat3', 'url9', 'AVAILABLE', 1);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (6, 'Cat15', 'url29', 'AVAILABLE', 1);
-# INSERT INTO pets (id, pet_name, photo_url, pet_status, category_id) VALUES (7, 'Cat25', 'url29', 'AVAILABLE', 1);
-
 INSERT INTO pets (id, pet_name, pet_status, category_id) VALUES (1, 'Cat1', 'AVAILABLE', 1);
 INSERT INTO pets (id, pet_name, pet_status, category_id) VALUES (2, 'Alisa', 'PENDING', 1);
 INSERT INTO pets (id, pet_name, pet_status, category_id) VALUES (3, 'Dina', 'AVAILABLE', 2);
