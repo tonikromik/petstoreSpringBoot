@@ -31,15 +31,15 @@ INSERT INTO pets (id, pet_name, pet_status, category_id) VALUES (7, 'Cat25', 'AV
 
 update pets_seq set next_val= 8 where next_val=1;
 
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (1, 'url1');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (1, 'url2');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (2, 'url21');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (3, 'url31');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (4, 'url41');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (4, 'url42');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (5, 'url51');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (6, 'url61');
-INSERT INTO pet_urls (pet_id, photo_urls) VALUES (7, 'url71');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (1, 'url1');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (1, 'url2');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (2, 'url21');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (3, 'url31');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (4, 'url41');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (4, 'url42');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (5, 'url51');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (6, 'url61');
+INSERT INTO pet_urls (pet_id, photo_url) VALUES (7, 'url71');
 
 INSERT INTO tags (id, tag_name) VALUES (1, 'aggressive');
 INSERT INTO tags (id, tag_name) VALUES (2, 'calm');

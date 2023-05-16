@@ -69,6 +69,6 @@ create table pets_tags
 create table pet_urls
 (
     pet_id bigint not null,
-    photo_urls varchar(255),
+    photo_url varchar(255),
     constraint pet_urls_fk foreign key (pet_id) references pets (id)
 );
