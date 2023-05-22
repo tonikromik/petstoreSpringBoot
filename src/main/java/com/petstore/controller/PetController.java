@@ -33,8 +33,8 @@ public class PetController {
 
     @Validated(OnUpdate.class)
     @PutMapping
-    public void updateExistedPet(@Valid @RequestBody PetDTO petDTO) {
-        petService.updatePet(petDTO);
+    public PetDTO updateExistedPet(@Valid @RequestBody PetDTO petDTO) {
+        return petService.updatePet(petDTO);
     }
 
     @GetMapping("/findByStatus")
@@ -48,10 +48,10 @@ public class PetController {
     }
 
     @PostMapping("/{petId}")
-    public void updatePetWithFormDataById(@PathVariable Long petId,
+    public PetDTO updatePetWithFormDataById(@PathVariable Long petId,
                                           @RequestParam(name = "name", required = false) String name,
                                           @RequestParam(name = "status", required = false) String status) {
-        petService.updatePetInTheStoreById(petId, name, status);
+        return petService.updatePetInTheStoreById(petId, name, status);
     }
 
     @DeleteMapping("/{petId}")

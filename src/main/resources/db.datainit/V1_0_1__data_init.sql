@@ -55,12 +55,12 @@ INSERT INTO pets_tags (pet_id, tag_id) VALUES (1, 1);
 INSERT INTO pets_tags (pet_id, tag_id) VALUES (4, 1);
 
 INSERT INTO orders (id, complete, pet_id, quantity, ship_date, order_status)
-VALUES (1, true, 3, 2, '2023-03-26T11:06:36.796Z', 'PLACED');
+VALUES (1, true, 3, 2, '2023-03-26T11:06:36', 'PLACED');
 INSERT INTO orders (id, complete, pet_id, quantity, ship_date, order_status)
-VALUES (2, true, 1, 1, '2023-03-27T11:06:36.796Z', 'PLACED');
+VALUES (2, true, 1, 1, '2023-03-27T11:06:37', 'PLACED');
 INSERT INTO orders (id, complete, pet_id, quantity, ship_date, order_status)
-VALUES (3, true, 1, 1, '2023-03-27T11:06:36.796Z', 'PLACED');
+VALUES (3, true, 1, 1, '2023-03-27T11:06:38', 'PLACED');
 INSERT INTO orders (id, complete, pet_id, quantity, ship_date, order_status)
-VALUES (4, true, 5, 35, '2023-03-27T11:06:36.796Z', 'PLACED');
+VALUES (4, true, 5, 35, '2023-03-27T11:06:39', 'PLACED');
 
 update orders_seq set next_val= 5 where next_val=1;

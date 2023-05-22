@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface PetService {
     /**
-     * Adds a new pet based on the provided PetDTO object.
+     * Adds a new pet based on the provided {@link PetDTO} PetDTO object.
      *
      * @param petDTO The PetDTO object representing the pet to be added.
      * @return The PetDTO object representing the added pet.
@@ -23,7 +23,7 @@ public interface PetService {
      * @param petDTO The PetDTO object containing the updated information for the pet.
      */
 
-    void updatePet(PetDTO petDTO);
+    PetDTO updatePet(PetDTO petDTO);
 
     /**
      * Finds a pet by id.
@@ -48,7 +48,7 @@ public interface PetService {
      * @param name   The new name for the pet.
      * @param status The new status for the pet.
      */
-    void updatePetInTheStoreById(Long id, String name, String status);
+    PetDTO updatePetInTheStoreById(Long id, String name, String status);
 
     /**
      * Deletes the pet from the store with the specified ID.
@@ -56,13 +56,6 @@ public interface PetService {
      * @param id The ID of the pet to delete.
      */
     void deletePet(Long id);
-
-    /**
-     * Initializes the folder for pet image uploads.
-     *
-     * @throws RuntimeException if the folder initialization fails
-     */
-    void init();
 
     /**
      * Uploads an image for a pet.

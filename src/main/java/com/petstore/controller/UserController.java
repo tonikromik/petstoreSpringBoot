@@ -2,6 +2,8 @@ package com.petstore.controller;
 
 import com.petstore.dto.UserDTO;
 import com.petstore.service.UserService;
+import com.petstore.validation.OnCreate;
+import com.petstore.validation.OnUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +22,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping()
+    @Validated(OnCreate.class)
+    @PostMapping
     @ResponseStatus(CREATED)
     public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
@@ -31,9 +34,10 @@ public class UserController {
         return userService.findByUsername(username);
     }
 
+    @Validated(OnUpdate.class)
     @PutMapping("/{username}")
-    public void updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
-        userService.updateUser(username, userDTO);
+    public UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
+        return userService.updateUser(username, userDTO);
     }
 
     @DeleteMapping("/{username}")
@@ -42,6 +46,7 @@ public class UserController {
         userService.deleteUser(username);
     }
 
+    @Validated(OnCreate.class)
     @PostMapping("/createWithList")
     @ResponseStatus(CREATED)
     public void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList) {

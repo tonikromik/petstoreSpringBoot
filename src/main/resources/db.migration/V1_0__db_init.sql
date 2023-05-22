@@ -1,7 +1,7 @@
 create table if not exists users
 (
     id          bigint       not null primary key,
-    email       varchar(255) not null,
+    email       varchar(255) not null unique,
     first_name  varchar(255),
     last_name   varchar(255),
     password    varchar(255) not null,
@@ -26,7 +26,6 @@ create table if not exists pets
 (
     id          bigint       not null primary key,
     pet_name    varchar(255) not null,
-#     photo_url   varchar(255) not null,
     pet_status  varchar(255) not null,
     category_id bigint       not null,
     constraint pets_categories_fk
@@ -51,8 +50,10 @@ create table if not exists orders
     complete     bit          not null,
     pet_id       bigint       not null,
     quantity     int          not null,
-    ship_date    varchar(255) not null,
-    order_status varchar(255) not null
+    ship_date    datetime(6) not null,
+    order_status varchar(255) not null,
+    constraint pets_orders_fk
+        foreign key (pet_id) references pets (id)
 );
 
 create table orders_seq (next_val bigint);

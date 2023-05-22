@@ -4,26 +4,32 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "pets")
 public class Pet extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pets_seq")
+    @GeneratedValue(strategy = SEQUENCE, generator = "pets_seq")
     @SequenceGenerator(name = "pets_seq", sequenceName = "pets_seq", initialValue = 8)
     private Long id;
 
     @Column(name = "pet_name", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
@@ -45,6 +51,8 @@ public class Pet extends BaseEntity {
     @Column(name = "pet_status", nullable = false)
     private Status status;
 
+    @OneToMany(mappedBy = "pet", cascade = {PERSIST, MERGE})
+    private List<Orders> orders;
     public enum Status {
         AVAILABLE,
         PENDING,

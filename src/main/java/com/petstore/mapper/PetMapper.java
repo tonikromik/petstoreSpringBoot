@@ -8,11 +8,11 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {TagMapper.class, CategoryMapper.class})
 public interface PetMapper extends GenericMapper<PetDTO, Pet> {
-    @Mapping(target = "tags", ignore = true)
     @Mapping(target = "status", defaultValue = "AVAILABLE")
     @Override
     Pet toEntity(PetDTO petDTO);
 
+    @Mapping(target = "id", ignore = true)
     void updateProperties(PetDTO petDTO, @MappingTarget Pet pet);
 
     @Override

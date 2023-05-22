@@ -1,22 +1,24 @@
 package com.petstore.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.GenerationType.*;
+
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "tags")
 public class Tag extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
+    @GeneratedValue(strategy = SEQUENCE, generator = "tags_seq")
     @SequenceGenerator(name = "tags_seq", sequenceName = "tags_seq", initialValue = 13)
     private Long id;
 

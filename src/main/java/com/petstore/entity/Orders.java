@@ -2,31 +2,36 @@ package com.petstore.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "orders")
 public class Orders extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_seq")
+    @GeneratedValue(strategy = SEQUENCE, generator = "orders_seq")
     @SequenceGenerator(name = "orders_seq", sequenceName = "orders_seq", initialValue = 5)
     private Long id;
 
-    @Column(name = "pet_id", nullable = false)
-    private Long petId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @DateTimeFormat
     @Column(name = "ship_date", nullable = false)
-    private String shipDate;
+    private LocalDateTime shipDate;
 
     @Enumerated(STRING)
     @Column(name = "order_status", nullable = false)
@@ -41,4 +46,3 @@ public class Orders extends BaseEntity{
         DELIVERED
     }
 }
-

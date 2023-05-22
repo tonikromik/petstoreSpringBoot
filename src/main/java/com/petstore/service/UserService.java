@@ -12,7 +12,7 @@ public interface UserService {
     /**
      * Saves the user details in the database.
      *
-     * @param userDTO the data transfer object containing the user details
+     * @param userDTO {@link UserDTO} the data transfer object containing the user details
      * @return the saved user data transfer object
      */
     UserDTO createUser(UserDTO userDTO);
@@ -31,7 +31,7 @@ public interface UserService {
      * @param username the username of the user to be updated
      * @param userDTO  the data transfer object containing the updated user details
      */
-    void updateUser(String username, UserDTO userDTO);
+    UserDTO updateUser(String username, UserDTO userDTO);
 
     /**
      * Deletes a user with the given username.

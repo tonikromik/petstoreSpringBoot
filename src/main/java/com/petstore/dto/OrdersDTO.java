@@ -2,25 +2,25 @@ package com.petstore.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class OrdersDTO extends BaseDTO{
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrdersDTO extends BaseDTO {
 
     private Long id;
-
     @NotNull
-    private Long petId;
+    private PetDTO pet;
 
     @NotNull
     private Integer quantity;
 
-    @NotBlank
-    @DateTimeFormat
-    private String shipDate;
+    private LocalDateTime shipDate;
 
     @NotBlank
     private String status;

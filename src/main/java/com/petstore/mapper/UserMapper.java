@@ -8,7 +8,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper extends GenericMapper<UserDTO, User> {
-
     @Mapping(target = "id", ignore = true)
     void updateProperties(UserDTO dto, @MappingTarget User entity);
 }

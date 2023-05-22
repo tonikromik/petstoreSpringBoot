@@ -25,6 +25,7 @@ public interface GenericMapper<D extends BaseDTO, E extends BaseEntity> {
         return entitiesList.stream().map(this::toDTO).collect(toList());
     }
 
-//    @Mapping(target = "id", ignore = true)
-//    void updateProperties(D dto, @MappingTarget E entity);
+    default Set<D> toSetDTOs(Set<E> entitySet) {
+        return entitySet.stream().map(this::toDTO).collect(Collectors.toSet());
+    }
 }
