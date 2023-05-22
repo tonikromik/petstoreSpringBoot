@@ -1,7 +1,5 @@
 package com.petstore;
 
-import com.petstore.service.PetService;
-import jakarta.annotation.Resource;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +10,6 @@ import java.nio.file.Paths;
 
 @SpringBootApplication
 public class PetstoreApplication implements CommandLineRunner {
-    @Resource
-    PetService petService;
 
     public static void main(String[] args) {
         SpringApplication.run(PetstoreApplication.class, args);
