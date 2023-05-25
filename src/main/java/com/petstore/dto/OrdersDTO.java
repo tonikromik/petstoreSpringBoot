@@ -15,7 +15,7 @@ public class OrdersDTO extends BaseDTO {
 
     private Long id;
     @NotNull
-    private PetDTO pet;
+    private PetDTO petDTO;
 
     @NotNull
     private Integer quantity;

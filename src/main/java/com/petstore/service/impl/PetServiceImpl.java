@@ -125,11 +125,9 @@ public class PetServiceImpl implements PetService {
                     .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, petId)));
             Files.copy(image.getInputStream(), path.resolve(Objects.requireNonNull(url)));
             pet.getPhotoUrls().add(url);
-            petRepository.save(pet);
+        } catch (FileAlreadyExistsException e) {
+            throw new RuntimeException(format(FILE_EXIST, url));
         } catch (Exception e) {
-            if (e instanceof FileAlreadyExistsException) {
-                throw new RuntimeException(format(FILE_EXIST, url));
-            }
             throw new RuntimeException(e.getMessage());
         }
     }
