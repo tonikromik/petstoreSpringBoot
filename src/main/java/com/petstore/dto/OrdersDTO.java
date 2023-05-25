@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import static com.petstore.entity.Orders.Status;
+
 @Getter
 @Setter
 @Builder
@@ -23,7 +25,7 @@ public class OrdersDTO extends BaseDTO {
     private LocalDateTime shipDate;
 
     @NotBlank
-    private String status;
+    private Status status;
 
     @NotNull
     private Boolean complete;

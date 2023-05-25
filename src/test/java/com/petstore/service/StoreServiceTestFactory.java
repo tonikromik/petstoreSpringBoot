@@ -23,7 +23,7 @@ public class StoreServiceTestFactory {
             .petDTO(PET_DTO)
             .quantity(2)
             .shipDate(LocalDateTime.now())
-            .status("APPROVED")
+            .status(Orders.Status.APPROVED)
             .complete(true)
             .build();
 }

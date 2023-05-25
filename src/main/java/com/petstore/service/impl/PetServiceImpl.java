@@ -8,6 +8,7 @@ import com.petstore.repository.PetRepository;
 import com.petstore.service.PetService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import static java.lang.String.format;
 /**
  * This implementation of {@link PetService} provides methods for managing pets.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
@@ -33,6 +35,10 @@ public class PetServiceImpl implements PetService {
     private final PetMapper petMapper;
     private static final String INVALID_STATUS_VALUE = "Invalid status value";
     private static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
+    private static final String PET_ADDED = "Pet with id '%d' added.";
+    private static final String PET_UPDATED = "Pet with id '%d' updated.";
+    private static final String PET_DELETED = "Pet with id '%d' deleted.";
+    private static final String IMAGE_UPLOADED = "Image for pet with id '%d' uploaded.";
     private static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
     private static final String FILE_EXIST = "A file with name '%s' already exists.";
 
@@ -56,6 +62,7 @@ public class PetServiceImpl implements PetService {
         try {
             return petMapper.toListDTOs(petRepository.findAllByStatus(Pet.Status.valueOf(status.toUpperCase())));
         } catch (IllegalArgumentException e) {
+            log.error(INVALID_STATUS_VALUE);
             throw new IllegalArgumentException(INVALID_STATUS_VALUE);
         }
     }
@@ -70,7 +77,9 @@ public class PetServiceImpl implements PetService {
         var category = categoryRepository.findById(pet.getCategory().getId())
                 .orElseThrow(() -> new EntityNotFoundException(format(CATEGORY_NOT_FOUND, pet.getCategory().getId())));
         pet.setCategory(category);
-        return petMapper.toDTO(petRepository.save(pet));
+        Pet saved = petRepository.save(pet);
+        log.info(format(PET_ADDED, saved.getId()));
+        return petMapper.toDTO(saved);
     }
 
     /**
@@ -82,6 +91,7 @@ public class PetServiceImpl implements PetService {
         var pet = petRepository.findById(petDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, petDTO.getId())));
         petMapper.updateProperties(petDTO, pet);
+        log.info(format(PET_UPDATED, pet.getId()));
         return petMapper.toDTO(pet);
     }
 
@@ -99,6 +109,7 @@ public class PetServiceImpl implements PetService {
         if (status != null) {
             petForUpdate.setStatus(Pet.Status.valueOf(status.toUpperCase()));
         }
+        log.info(format(PET_UPDATED, petForUpdate.getId()));
         return petMapper.toDTO(petForUpdate);
     }
 
@@ -110,6 +121,7 @@ public class PetServiceImpl implements PetService {
     public void deletePet(Long id) {
         petRepository.delete(petRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, id))));
+        log.info(format(PET_DELETED, id));
     }
 
     /**
@@ -125,9 +137,12 @@ public class PetServiceImpl implements PetService {
                     .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, petId)));
             Files.copy(image.getInputStream(), path.resolve(Objects.requireNonNull(url)));
             pet.getPhotoUrls().add(url);
+            log.info(format(IMAGE_UPLOADED, petId));
         } catch (FileAlreadyExistsException e) {
+            log.error(format(FILE_EXIST, url));
             throw new RuntimeException(format(FILE_EXIST, url));
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
