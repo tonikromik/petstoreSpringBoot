@@ -1,7 +1,7 @@
 package com.petstore.service;
 
-import com.petstore.dto.OrdersDTO;
-import com.petstore.entity.Orders;
+import com.petstore.dto.OrderDTO;
+import com.petstore.entity.Order;
 
 import java.time.LocalDateTime;
 
@@ -9,16 +9,16 @@ import static com.petstore.service.PetServiceTestFactory.*;
 
 public class StoreServiceTestFactory {
 
-    public static final Orders ORDER = Orders.builder()
+    public static final Order ORDER = Order.builder()
             .id(1L)
             .pet(pet)
             .quantity(2)
             .shipDate(LocalDateTime.now())
-            .status(Orders.Status.APPROVED)
+            .status(Order.Status.APPROVED)
             .complete(true)
             .build();
 
-    public static final OrdersDTO ORDERS_DTO = OrdersDTO.builder()
+    public static final OrderDTO ORDERS_DTO = OrderDTO.builder()
             .id(1L)
             .petDTO(PET_DTO)
             .quantity(2)

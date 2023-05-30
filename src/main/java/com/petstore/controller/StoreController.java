@@ -1,6 +1,6 @@
 package com.petstore.controller;
 
-import com.petstore.dto.OrdersDTO;
+import com.petstore.dto.OrderDTO;
 import com.petstore.service.StoreService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -10,23 +10,25 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/store")
 @Validated
-public class StoreController {
+public class StoreController{
+//public class StoreController implements StoreCont{
 
     private final StoreService storeService;
 
-    @PostMapping("/order")
+    @PostMapping(value = "/order", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public OrdersDTO createOrder(@Valid @RequestBody OrdersDTO orderDTO) {
+    public OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         return storeService.saveOrder(orderDTO);
     }
 
-    @GetMapping("/order/{orderId}")
-    public OrdersDTO findById(@PathVariable @Min(1) Long orderId) {
+    @GetMapping(value = "/order/{orderId}", produces = APPLICATION_JSON_VALUE)
+    public OrderDTO findById(@PathVariable @Min(1) Long orderId) {
         return storeService.findById(orderId);
     }
 

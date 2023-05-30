@@ -1,6 +1,6 @@
 package com.petstore.service;
 
-import com.petstore.dto.OrdersDTO;
+import com.petstore.dto.OrderDTO;
 import com.petstore.mapper.OrdersMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.impl.StoreServiceImpl;
@@ -34,10 +34,10 @@ public class StoreServiceImplTest {
         when(storeRepository.findAllFieldsById(1L)).thenReturn(Optional.of(ORDER));
         when(ordersMapper.toDTO(ORDER)).thenReturn(ORDERS_DTO);
 
-        OrdersDTO ordersDTO = storeService.findById(1L);
+        OrderDTO orderDTO = storeService.findById(1L);
 
-        assertNotNull(ordersDTO);
-        assertEquals(ORDERS_DTO, ordersDTO);
+        assertNotNull(orderDTO);
+        assertEquals(ORDERS_DTO, orderDTO);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class StoreServiceImplTest {
         when(storeRepository.save(any())).thenReturn(ORDER);
         when(ordersMapper.toDTO(any())).thenReturn(ORDERS_DTO);
 
-        OrdersDTO savedOrder = storeService.saveOrder(ORDERS_DTO);
+        OrderDTO savedOrder = storeService.saveOrder(ORDERS_DTO);
 
         assertNotNull(savedOrder);
         assertEquals(ORDERS_DTO, savedOrder);

@@ -2,6 +2,7 @@ package com.petstore.dto;
 
 import com.petstore.validation.OnCreate;
 import com.petstore.validation.OnUpdate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -12,6 +13,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "User")
 public class UserDTO extends BaseDTO{
 
     @Null(groups = OnCreate.class, message = "id must be null")

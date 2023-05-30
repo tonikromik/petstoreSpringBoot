@@ -3,6 +3,7 @@ package com.petstore.dto;
 import com.petstore.entity.Pet;
 import com.petstore.validation.OnCreate;
 import com.petstore.validation.OnUpdate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "Pet")
 public class PetDTO extends BaseDTO {
 
     @Null(groups = OnCreate.class, message = "id must be null")

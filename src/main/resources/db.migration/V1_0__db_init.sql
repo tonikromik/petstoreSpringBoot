@@ -29,7 +29,8 @@ create table if not exists pets
     pet_status  varchar(255) not null,
     category_id bigint       not null,
     constraint pets_categories_fk
-        foreign key (category_id) references categories (id)
+        foreign key (category_id) references categories (id),
+    INDEX pet_status_idx (pet_status)
 );
 
 create table pets_seq (next_val bigint);

@@ -2,6 +2,7 @@ package com.petstore.service.impl;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.entity.Pet;
+import com.petstore.exception.InvalidStatusException;
 import com.petstore.mapper.PetMapper;
 import com.petstore.repository.CategoryRepository;
 import com.petstore.repository.PetRepository;
@@ -56,7 +57,7 @@ public class PetServiceImpl implements PetService {
         try {
             return petMapper.toListDTOs(petRepository.findAllByStatus(Pet.Status.valueOf(status.toUpperCase())));
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(INVALID_STATUS_VALUE);
+            throw new InvalidStatusException(INVALID_STATUS_VALUE);
         }
     }
 

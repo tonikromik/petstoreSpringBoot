@@ -1,7 +1,7 @@
 package com.petstore.service.impl;
 
-import com.petstore.dto.OrdersDTO;
-import com.petstore.entity.Orders;
+import com.petstore.dto.OrderDTO;
+import com.petstore.entity.Order;
 import com.petstore.mapper.OrdersMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.StoreService;
@@ -29,8 +29,8 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional(readOnly = true)
     @Override
-    public OrdersDTO findById(Long id) {
-        Orders entity = storeRepository.findAllFieldsById(id)
+    public OrderDTO findById(Long id) {
+        Order entity = storeRepository.findAllFieldsById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(ORDER_NOT_FOUND, id)));
         return ordersMapper.toDTO(entity);
     }
@@ -40,8 +40,8 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional
     @Override
-    public OrdersDTO saveOrder(OrdersDTO ordersDTO) {
-        return ordersMapper.toDTO(storeRepository.save(ordersMapper.toEntity(ordersDTO)));
+    public OrderDTO saveOrder(OrderDTO orderDTO) {
+        return ordersMapper.toDTO(storeRepository.save(ordersMapper.toEntity(orderDTO)));
     }
 
     /**
