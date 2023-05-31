@@ -15,8 +15,6 @@ import java.nio.file.Paths;
 @OpenAPIDefinition(
         info = @Info(title = "Petstore API", version = "1.0.0", description = "This is a sample server Petstore server."),
         servers = @Server(url = "http://localhost:8080")
-//        ,
-//        tags = {@Tag(name = "TodoItems", description = "This is the todoitems desc.")}
 )
 public class PetstoreApplication implements CommandLineRunner {
 
@@ -24,7 +22,7 @@ public class PetstoreApplication implements CommandLineRunner {
         SpringApplication.run(PetstoreApplication.class, args);
     }
 
-    public void run(String... arg){
+    public void run(String... arg) {
         try {
             Files.createDirectories(Paths.get("uploads"));
         } catch (IOException e) {

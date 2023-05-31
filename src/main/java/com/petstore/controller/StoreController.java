@@ -16,8 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 @RequestMapping("/store")
 @Validated
-public class StoreController{
-//public class StoreController implements StoreCont{
+public class StoreController implements StoreControllerOpenApiWrapper {
 
     private final StoreService storeService;
 

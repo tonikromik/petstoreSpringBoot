@@ -1,7 +1,6 @@
 package com.petstore.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -19,14 +18,14 @@ public class OrderDTO extends BaseDTO {
 
     @Schema(name = "pet")
     @NotNull
-    private PetDTO petDTO;
+    private PetDTO pet;
 
     @NotNull
     private Integer quantity;
 
     private LocalDateTime shipDate;
 
-    @NotBlank
+    @NotNull
     private String status;
 
     @NotNull
