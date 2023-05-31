@@ -13,29 +13,30 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/user")
 @Validated
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserControllerOpenApiWrapper {
 
     private final UserService userService;
 
     @Validated(OnCreate.class)
-    @PostMapping
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping(value = "/{username}", produces = APPLICATION_JSON_VALUE)
     public UserDTO findUserByUsername(@PathVariable String username) {
         return userService.findByUsername(username);
     }
 
     @Validated(OnUpdate.class)
-    @PutMapping("/{username}")
+    @PutMapping(value = "/{username}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
         return userService.updateUser(username, userDTO);
     }
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @Validated(OnCreate.class)
-    @PostMapping("/createWithList")
+    @PostMapping(value = "/createWithList", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList) {
         userService.createAll(userDTOList);

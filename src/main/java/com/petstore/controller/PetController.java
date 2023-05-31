@@ -15,39 +15,40 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/pet")
 @Validated
 @RequiredArgsConstructor
-public class PetController {
+public class PetController implements PetControllerOpenApiWrapper {
 
     private final PetService petService;
 
     @Validated(OnCreate.class)
-    @PostMapping
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public PetDTO addPet(@Valid @RequestBody PetDTO petDTO) {
         return petService.addPet(petDTO);
     }
 
     @Validated(OnUpdate.class)
-    @PutMapping
+    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public PetDTO updateExistedPet(@Valid @RequestBody PetDTO petDTO) {
         return petService.updatePet(petDTO);
     }
 
-    @GetMapping("/findByStatus")
+    @GetMapping(value = "/findByStatus", produces = APPLICATION_JSON_VALUE)
     public List<PetDTO> findByStatus(@RequestParam("status") String status) {
         return petService.findPetsByStatus(status);
     }
 
-    @GetMapping("/{petId}")
+    @GetMapping(value = "/{petId}", produces = APPLICATION_JSON_VALUE)
     public PetDTO findById(@PathVariable @Min(1) Long petId) {
         return petService.findById(petId);
     }
 
-    @PostMapping("/{petId}")
+    @PostMapping(value = "/{petId}", produces = APPLICATION_JSON_VALUE)
     public PetDTO updatePetWithFormDataById(@PathVariable Long petId,
                                           @RequestParam(name = "name", required = false) String name,
                                           @RequestParam(name = "status", required = false) String status) {

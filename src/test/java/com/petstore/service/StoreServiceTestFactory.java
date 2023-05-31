@@ -20,7 +20,7 @@ public class StoreServiceTestFactory {
 
     public static final OrderDTO ORDERS_DTO = OrderDTO.builder()
             .id(1L)
-            .petDTO(PET_DTO)
+            .pet(PET_DTO)
             .quantity(2)
             .shipDate(LocalDateTime.now())
             .status("APPROVED")
