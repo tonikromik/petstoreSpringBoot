@@ -7,6 +7,7 @@ import com.petstore.validation.OnUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ public class PetController implements PetControllerOpenApiWrapper {
 
     private final PetService petService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnCreate.class)
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
@@ -32,6 +34,7 @@ public class PetController implements PetControllerOpenApiWrapper {
         return petService.addPet(petDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnUpdate.class)
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public PetDTO updateExistedPet(@Valid @RequestBody PetDTO petDTO) {
@@ -48,6 +51,7 @@ public class PetController implements PetControllerOpenApiWrapper {
         return petService.findById(petId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/{petId}", produces = APPLICATION_JSON_VALUE)
     public PetDTO updatePetWithFormDataById(@PathVariable Long petId,
                                           @RequestParam(name = "name", required = false) String name,
@@ -55,12 +59,14 @@ public class PetController implements PetControllerOpenApiWrapper {
         return petService.updatePetInTheStoreById(petId, name, status);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{petId}")
     @ResponseStatus(NO_CONTENT)
     public void deletePetById(@PathVariable Long petId) {
         petService.deletePet(petId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{petId}/uploadImage")
     public void uploadImage(@PathVariable Long petId, @RequestParam("file") MultipartFile image) {
         petService.uploadImage(petId, image);
