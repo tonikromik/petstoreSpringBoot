@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -42,11 +43,14 @@ public interface StoreControllerOpenApiWrapper {
                                     }""")})),
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid Order", content = @Content)
-            })
+            },
+            security = {@SecurityRequirement(name = "BasicAuth")}
+    )
     OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO);
 
     @Operation(summary = "Find purchase order by ID",
             description = "For valid response try integer IDs with value >=1 and <= 5. Other values will generated exceptions",
+            tags = {"store"},
             parameters = {
                     @Parameter(name = "orderId", description = "ID of order that needs to be fetched", in = ParameterIn.PATH)
             },
@@ -56,16 +60,18 @@ public interface StoreControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
             },
-            tags = {"store"}
+            security = {@SecurityRequirement(name = "BasicAuth")}
             )
     OrderDTO findById(@PathVariable @Min(1) Long orderId);
 
     @Operation(summary = "Delete purchase order by ID",
             description = "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+            tags = {"store"},
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
                     @ApiResponse(responseCode = "404", description = "Order not found")
             },
-            tags = {"store"})
+            security = {@SecurityRequirement(name = "BasicAuth")}
+            )
     void deleteById(@PathVariable @Min(1) Long orderId);
 }

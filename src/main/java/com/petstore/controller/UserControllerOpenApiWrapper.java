@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
@@ -54,7 +55,8 @@ public interface UserControllerOpenApiWrapper {
                             content = @Content(schema = @Schema(implementation = UserDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-            }
+            },
+            security = {@SecurityRequirement(name = "BasicAuth")}
     )
     UserDTO findUserByUsername(@PathVariable String username);
 
@@ -73,7 +75,8 @@ public interface UserControllerOpenApiWrapper {
                             content = @Content(schema = @Schema(implementation = UserDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-            }
+            },
+            security = {@SecurityRequirement(name = "BasicAuth")}
     )
     @Validated(OnUpdate.class)
     UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO);
@@ -87,7 +90,9 @@ public interface UserControllerOpenApiWrapper {
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-            })
+            },
+            security = {@SecurityRequirement(name = "BasicAuth")}
+    )
     void deleteUserByUsername(@PathVariable String username);
 
     @Operation(summary = "Creates list of users with given input array",
@@ -120,7 +125,8 @@ public interface UserControllerOpenApiWrapper {
             responses = {
                     @ApiResponse(responseCode = "400", description = "Some user already exists.",
                             content = @Content)
-            }
+            },
+            security = {@SecurityRequirement(name = "BasicAuth")}
     )
     @Validated(OnCreate.class)
     void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList);
