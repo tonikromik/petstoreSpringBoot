@@ -2,7 +2,7 @@ package com.petstore.service.impl;
 
 import com.petstore.dto.OrderDTO;
 import com.petstore.entity.Order;
-import com.petstore.mapper.OrdersMapper;
+import com.petstore.mapper.OrderMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.StoreService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +22,7 @@ import static java.lang.String.format;
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
-    private final OrdersMapper ordersMapper;
+    private final OrderMapper orderMapper;
 
     private static final String ORDER_NOT_FOUND = "Order with id '%d' not found.";
     private static final String ORDER_SAVED = "Order with id '%d' saved.";
@@ -36,7 +36,7 @@ public class StoreServiceImpl implements StoreService {
     public OrderDTO findById(Long id) {
         Order entity = storeRepository.findAllFieldsById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(ORDER_NOT_FOUND, id)));
-        return ordersMapper.toDTO(entity);
+        return orderMapper.toDTO(entity);
     }
 
     /**
@@ -45,9 +45,9 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     @Override
     public OrderDTO saveOrder(OrderDTO orderDTO) {
-        Order saved = storeRepository.save(ordersMapper.toEntity(orderDTO));
+        Order saved = storeRepository.save(orderMapper.toEntity(orderDTO));
         log.info(format(ORDER_SAVED, saved.getId()));
-        return ordersMapper.toDTO(saved);
+        return orderMapper.toDTO(saved);
     }
 
     /**

@@ -50,7 +50,10 @@ public interface PetControllerOpenApiWrapper {
                                     }
                                     """)})),
             responses = {@ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)},
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     @Validated(OnCreate.class)
     PetDTO addPet(@Valid @RequestBody PetDTO petDTO);
@@ -89,7 +92,10 @@ public interface PetControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content),
                     @ApiResponse(responseCode = "405", description = "Validation exception", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     @Validated(OnUpdate.class)
     PetDTO updateExistedPet(@Valid @RequestBody PetDTO petDTO);
@@ -124,7 +130,10 @@ public interface PetControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content),
                     @ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     PetDTO updatePetWithFormDataById(@PathVariable Long petId,
                                      @RequestParam(name = "name", required = false) String name,
@@ -146,7 +155,8 @@ public interface PetControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "405", description = "Validation exception", content = @Content)
             },
             security = {
-                    @SecurityRequirement(name = "BasicAuth")
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
             }
     )
     void uploadImage(@PathVariable Long petId, @RequestParam("file") MultipartFile image);
@@ -180,7 +190,10 @@ public interface PetControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content)
 
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     void deletePetById(@PathVariable Long petId);
 }

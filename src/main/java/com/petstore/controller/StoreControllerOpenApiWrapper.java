@@ -44,7 +44,10 @@ public interface StoreControllerOpenApiWrapper {
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid Order", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO);
 
@@ -60,8 +63,11 @@ public interface StoreControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
-            )
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
+    )
     OrderDTO findById(@PathVariable @Min(1) Long orderId);
 
     @Operation(summary = "Delete purchase order by ID",
@@ -71,7 +77,10 @@ public interface StoreControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
                     @ApiResponse(responseCode = "404", description = "Order not found")
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
-            )
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
+    )
     void deleteById(@PathVariable @Min(1) Long orderId);
 }

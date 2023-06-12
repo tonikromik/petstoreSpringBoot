@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = PetMapper.class)
-public interface OrdersMapper extends GenericMapper<OrderDTO, Order>{
+public interface OrderMapper extends GenericMapper<OrderDTO, Order>{
     @Mapping(target = "shipDate", expression = "java(java.time.LocalDateTime.now())")
     @Override
     Order toEntity(OrderDTO dto);

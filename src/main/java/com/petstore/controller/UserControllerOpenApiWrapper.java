@@ -56,7 +56,10 @@ public interface UserControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     UserDTO findUserByUsername(@PathVariable String username);
 
@@ -76,7 +79,10 @@ public interface UserControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     @Validated(OnUpdate.class)
     UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO);
@@ -91,7 +97,10 @@ public interface UserControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     void deleteUserByUsername(@PathVariable String username);
 
@@ -126,7 +135,10 @@ public interface UserControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Some user already exists.",
                             content = @Content)
             },
-            security = {@SecurityRequirement(name = "BasicAuth")}
+            security = {
+                    @SecurityRequirement(name = "BasicAuth"),
+                    @SecurityRequirement(name = "BearerAuth")
+            }
     )
     @Validated(OnCreate.class)
     void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList);

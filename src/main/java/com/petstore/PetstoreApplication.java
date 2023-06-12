@@ -23,10 +23,17 @@ import java.nio.file.Paths;
         name = "BasicAuth",
         type = SecuritySchemeType.HTTP,
         scheme = "basic",
-        description = "HTTP Basic Authentication." +
-                "\nThere are two roles for testing application security: " +
-                "\nROLE_USER (login: user; password: user) and " +
-                "\nROLE_ADMIN (login: admin; password: admin)"
+        description = """
+                HTTP Basic Authentication.
+                There are two roles for testing application security:\s
+                ROLE_USER (login: user; password: user) and\s
+                ROLE_ADMIN (login: admin; password: admin)"""
+)
+@SecurityScheme(
+        name = "BearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        description = "For generating token use '/login' auth controller."
 )
 public class PetstoreApplication implements CommandLineRunner {
 

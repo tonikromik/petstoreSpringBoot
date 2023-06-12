@@ -1,7 +1,7 @@
 package com.petstore.service;
 
 import com.petstore.dto.OrderDTO;
-import com.petstore.mapper.OrdersMapper;
+import com.petstore.mapper.OrderMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.impl.StoreServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +27,7 @@ public class StoreServiceImplTest {
     @Mock
     private StoreRepository storeRepository;
     @Mock
-    private OrdersMapper ordersMapper;
+    private OrderMapper ordersMapper;
     @InjectMocks
     private StoreServiceImpl storeService;
 
