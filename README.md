@@ -18,7 +18,8 @@ updating, and retrieving pet information. It also provides functionality for man
 
 ### Setup
 - clone or download in ZIP format directory on your local machine from https://github.com/tonikromik/petstoreSpringBoot.git
-- import a project to IDE and run PetstoreApplication.java
+- import a project to IDE and run PetstoreApplication.java 
+or use ``` mvn spring-boot:run ``` from project folder
 - open a web browser and navigate to http://localhost:8080/swagger-ui/index.html
 
 

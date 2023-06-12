@@ -92,7 +92,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUserName(eq("user"))).thenReturn(Optional.of(USER));
         when(userMapper.toDTO(USER)).thenReturn(USER_DTO2);
 
-        UserDTO updatedUser = userServiceImpl.updateUser("user", USER_DTO2);
+        UserDTO updatedUser = userServiceImpl.updateUser(USER_DTO2);
 
         verify(userRepository).findByUserName("user");
         verify(userMapper).updateProperties(USER_DTO2, USER);
@@ -105,7 +105,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class,
-                () -> userServiceImpl.updateUser(anyString(), USER_DTO));
+                () -> userServiceImpl.updateUser(USER_DTO));
         verify(userRepository).findByUserName(anyString());
     }
 
