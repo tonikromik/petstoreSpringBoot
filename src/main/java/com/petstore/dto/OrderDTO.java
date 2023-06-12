@@ -1,10 +1,12 @@
 package com.petstore.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
+import static com.petstore.entity.Orders.Status;
 
 @Getter
 @Setter
@@ -18,15 +20,15 @@ public class OrderDTO extends BaseDTO {
 
     @Schema(name = "pet")
     @NotNull
-    private PetDTO pet;
+    private PetDTO petDTO;
 
     @NotNull
     private Integer quantity;
 
     private LocalDateTime shipDate;
 
-    @NotNull
-    private String status;
+    @NotBlank
+    private Status status;
 
     @NotNull
     private Boolean complete;
