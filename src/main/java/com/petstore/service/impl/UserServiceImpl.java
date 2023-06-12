@@ -69,7 +69,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO updateUser(String username, UserDTO userDTO) {
-        // чи потрібно логувати ".orElseThrow(() -> new EntityNotFoundException...."
         var currentUser = userRepository.findByUserName(username)
                 .orElseThrow(() -> new EntityNotFoundException(format(USER_NOT_FOUND, username)));
         userMapper.updateProperties(userDTO, currentUser);

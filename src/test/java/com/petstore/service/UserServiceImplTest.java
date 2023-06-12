@@ -16,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Optional;
 
 import static com.petstore.service.UserServiceTestFactory.*;
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -24,6 +25,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
+    private static final String USER_NOT_FOUND = "User with username '%s' not found.";
+    private static final String USER_ALREADY_EXIST = "User with username '%s' or email '%s' already exists.";
+    private static final String SOME_USER_ALREADY_EXIST = "Some user already exist.";
+
     @Mock
     private UserMapper userMapper;
     @Mock
@@ -38,6 +43,7 @@ public class UserServiceImplTest {
 
         UserDTO returnedUserDTO = userServiceImpl.findByUsername("user");
 
+        verify(userRepository).findByUserName("user");
         assertNotNull(returnedUserDTO);
         assertEquals(returnedUserDTO, USER_DTO);
     }
@@ -45,12 +51,13 @@ public class UserServiceImplTest {
     @Test
     public void findByUsername_ThrowEntityNotFoundException() {
         when(userRepository.findByUserName(anyString())).thenThrow(
-                new EntityNotFoundException("User with username 'user' not found."));
+                new EntityNotFoundException(format(USER_NOT_FOUND, "user")));
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> userServiceImpl.findByUsername("user"));
 
-        assertEquals("User with username 'user' not found.", exception.getMessage());
+        verify(userRepository).findByUserName("user");
+        assertEquals(format(USER_NOT_FOUND, "user"), exception.getMessage());
     }
 
     @Test
@@ -61,22 +68,23 @@ public class UserServiceImplTest {
 
         UserDTO returnedUserDTO = userServiceImpl.createUser(USER_DTO);
 
+        verify(userRepository).save(USER);
         assertNotNull(returnedUserDTO);
         assertEquals(USER_DTO, returnedUserDTO);
-        verify(userRepository).save(USER);
     }
 
 
     @Test
     public void createUser_ThrowDataIntegrityViolationException() {
         when(userRepository.save(any(User.class))).thenThrow(
-                new DataIntegrityViolationException("User with username 'user' already exists."));
+                new DataIntegrityViolationException(format(USER_ALREADY_EXIST, "user", "email@gmail.com")));
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(USER);
 
         var exception = assertThrows(DataIntegrityViolationException.class,
                 () -> userServiceImpl.createUser(USER_DTO));
 
-        assertEquals("User with username 'user' or email 'email@gmail.com' already exists.", exception.getMessage());
+        verify(userRepository).save(any());
+        assertEquals(format(USER_ALREADY_EXIST, "user", "email@gmail.com"), exception.getMessage());
     }
 
     @Test
@@ -98,6 +106,7 @@ public class UserServiceImplTest {
 
         assertThrows(EntityNotFoundException.class,
                 () -> userServiceImpl.updateUser(anyString(), USER_DTO));
+        verify(userRepository).findByUserName(anyString());
     }
 
     @Test
@@ -114,6 +123,8 @@ public class UserServiceImplTest {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> userServiceImpl.deleteUser(anyString()));
+        verify(userRepository).findByUserName(anyString());
+        verify(userRepository, times(0)).save(any());
     }
 
     @Test
@@ -129,11 +140,12 @@ public class UserServiceImplTest {
     @Test
     public void createAllUsers_DataIntegrityViolationException() {
         when(userRepository.saveAll(anyList())).thenThrow(
-                new DataIntegrityViolationException("Some user already exist."));
+                new DataIntegrityViolationException(format(SOME_USER_ALREADY_EXIST)));
 
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class,
                 () -> userServiceImpl.createAll(USER_DTOS));
 
-        assertEquals("Some user already exist.", exception.getMessage());
+        verify(userRepository).saveAll(anyList());
+        assertEquals(format(SOME_USER_ALREADY_EXIST), exception.getMessage());
     }
 }

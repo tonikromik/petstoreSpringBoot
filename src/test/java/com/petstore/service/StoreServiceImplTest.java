@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static com.petstore.service.StoreServiceTestFactory.ORDER;
 import static com.petstore.service.StoreServiceTestFactory.ORDERS_DTO;
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceImplTest {
+    private static final String ORDER_NOT_FOUND = "Order with id '%d' not found.";
     @Mock
     private StoreRepository storeRepository;
     @Mock
@@ -36,6 +38,7 @@ public class StoreServiceImplTest {
 
         OrdersDTO ordersDTO = storeService.findById(1L);
 
+        verify(storeRepository).findAllFieldsById(1L);
         assertNotNull(ordersDTO);
         assertEquals(ORDERS_DTO, ordersDTO);
     }
@@ -43,31 +46,34 @@ public class StoreServiceImplTest {
     @Test
     public void findById_ThrowEntityNotFoundException() {
         when(storeRepository.findAllFieldsById(anyLong())).thenThrow(
-                new EntityNotFoundException("Order with id '1L' not found."));
+                new EntityNotFoundException(format(ORDER_NOT_FOUND, 1L)));
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> storeService.findById(1L));
-        assertEquals("Order with id '1L' not found.", exception.getMessage());
+
+        verify(storeRepository).findAllFieldsById(1L);
+        assertEquals(format(ORDER_NOT_FOUND, 1L), exception.getMessage());
     }
 
     @Test
-    public void saveOrder_ReturnOrdersDTO(){
+    public void saveOrder_ReturnOrdersDTO() {
         when(ordersMapper.toEntity(any())).thenReturn(ORDER);
         when(storeRepository.save(any())).thenReturn(ORDER);
         when(ordersMapper.toDTO(any())).thenReturn(ORDERS_DTO);
 
         OrdersDTO savedOrder = storeService.saveOrder(ORDERS_DTO);
 
+        verify(storeRepository).save(ORDER);
         assertNotNull(savedOrder);
         assertEquals(ORDERS_DTO, savedOrder);
     }
 
     @Test
-    public void delete_ReturnVoid(){
+    public void delete_ReturnVoid() {
         when(storeRepository.findById(anyLong())).thenReturn(Optional.of(ORDER));
         doNothing().when(storeRepository).delete(ORDER);
 
-        assertAll(()-> storeService.delete(1L));
+        assertAll(() -> storeService.delete(1L));
         verify(storeRepository).delete(ORDER);
     }
 }

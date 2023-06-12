@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserServiceTestFactory {
 
-    public static final User USER = User.builder()
+    static final User USER = User.builder()
             .id(1L)
             .userName("user")
             .firstName("first")
@@ -19,7 +19,7 @@ public class UserServiceTestFactory {
             .userStatus(1)
             .build();
 
-    public static final User USER2 = User.builder()
+    static final User USER2 = User.builder()
             .id(2L)
             .userName("user2")
             .firstName("first2")
@@ -29,7 +29,7 @@ public class UserServiceTestFactory {
             .phone("+380970000002")
             .userStatus(1)
             .build();
-    public static final UserDTO USER_DTO = UserDTO.builder()
+    static final UserDTO USER_DTO = UserDTO.builder()
             .id(1L)
             .userName("user")
             .firstName("first")
@@ -40,7 +40,7 @@ public class UserServiceTestFactory {
             .userStatus(1)
             .build();
 
-    public static final UserDTO USER_DTO2 = UserDTO.builder()
+    static final UserDTO USER_DTO2 = UserDTO.builder()
             .id(2L)
             .userName("user2")
             .firstName("first2")
@@ -50,6 +50,6 @@ public class UserServiceTestFactory {
             .phone("+380970000002")
             .userStatus(1)
             .build();
-    public static final List<User> USERS = Arrays.asList(USER, USER2);
-    public static final List<UserDTO> USER_DTOS = Arrays.asList(USER_DTO, USER_DTO2);
+    static final List<User> USERS = Arrays.asList(USER, USER2);
+    static final List<UserDTO> USER_DTOS = Arrays.asList(USER_DTO, USER_DTO2);
 }

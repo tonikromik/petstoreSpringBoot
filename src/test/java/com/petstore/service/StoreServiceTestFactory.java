@@ -9,7 +9,7 @@ import static com.petstore.service.PetServiceTestFactory.*;
 
 public class StoreServiceTestFactory {
 
-    public static final Orders ORDER = Orders.builder()
+    static final Orders ORDER = Orders.builder()
             .id(1L)
             .pet(pet)
             .quantity(2)
@@ -18,7 +18,7 @@ public class StoreServiceTestFactory {
             .complete(true)
             .build();
 
-    public static final OrdersDTO ORDERS_DTO = OrdersDTO.builder()
+    static final OrdersDTO ORDERS_DTO = OrdersDTO.builder()
             .id(1L)
             .petDTO(PET_DTO)
             .quantity(2)
