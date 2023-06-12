@@ -39,8 +39,8 @@ public class StoreServiceImplTest {
         OrdersDTO ordersDTO = storeService.findById(1L);
 
         verify(storeRepository).findAllFieldsById(1L);
-        assertNotNull(ordersDTO);
-        assertEquals(ORDERS_DTO, ordersDTO);
+        assertNotNull(orderDTO);
+        assertEquals(ORDERS_DTO, orderDTO);
     }
 
     @Test

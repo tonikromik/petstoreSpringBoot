@@ -8,6 +8,11 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper extends GenericMapper<UserDTO, User> {
+
+    @Override
+    @Mapping(target = "role", expression = "java(User.Role.USER)")
+    User toEntity(UserDTO dto);
+
     @Mapping(target = "id", ignore = true)
     void updateProperties(UserDTO dto, @MappingTarget User entity);
 }

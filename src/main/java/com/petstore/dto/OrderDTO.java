@@ -13,9 +13,12 @@ import static com.petstore.entity.Orders.Status;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrdersDTO extends BaseDTO {
+@Schema(name = "Order")
+public class OrderDTO extends BaseDTO {
 
     private Long id;
+
+    @Schema(name = "pet")
     @NotNull
     private PetDTO petDTO;
 

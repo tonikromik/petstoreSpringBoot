@@ -52,7 +52,7 @@ public class Pet extends BaseEntity {
     private Status status;
 
     @OneToMany(mappedBy = "pet", cascade = {PERSIST, MERGE})
-    private List<Orders> orders;
+    private List<Order> orders;
     public enum Status {
         AVAILABLE,
         PENDING,

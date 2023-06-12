@@ -44,8 +44,8 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional
     @Override
-    public OrdersDTO saveOrder(OrdersDTO ordersDTO) {
-        Orders saved = storeRepository.save(ordersMapper.toEntity(ordersDTO));
+    public OrderDTO saveOrder(OrderDTO orderDTO) {
+        Orders saved = storeRepository.save(ordersMapper.toEntity(orderDTO));
         log.info(format(ORDER_SAVED, saved.getId()));
         return ordersMapper.toDTO(saved);
     }
