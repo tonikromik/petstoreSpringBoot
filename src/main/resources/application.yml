@@ -31,3 +31,6 @@ spring:
     url: jdbc:mysql://localhost:3306/petstore?createDatabaseIfNotExist=true
     user: root
     password: root
+
+jwt:
+  key: 9faa372517ac1d389758d3750fc07acf00f542277f26fec1ce4593e93f64e338

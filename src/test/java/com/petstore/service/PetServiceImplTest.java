@@ -2,6 +2,7 @@ package com.petstore.service;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.entity.Pet;
+import com.petstore.exception.InvalidStatusException;
 import com.petstore.mapper.PetMapper;
 import com.petstore.mapper.TagMapper;
 import com.petstore.repository.CategoryRepository;
@@ -17,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.petstore.entity.Pet.Status.valueOf;
 import static com.petstore.service.PetServiceTestFactory.*;
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -25,6 +28,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PetServiceImplTest {
+    private static final String INVALID_STATUS_VALUE = "Invalid status value";
+    private static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
     @Mock
     private PetMapper petMapper;
     @Mock
@@ -43,6 +48,7 @@ public class PetServiceImplTest {
 
         PetDTO returnedPetDTO = petService.findById(1L);
 
+        verify(petRepository).findById(1L);
         assertNotNull(returnedPetDTO);
         assertEquals(PET_DTO, returnedPetDTO);
     }
@@ -55,27 +61,28 @@ public class PetServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> petService.findById(1L));
 
+        verify(petRepository).findById(1L);
         assertEquals("Pet with id '1L' not found.", exception.getMessage());
     }
 
     @Test
     public void findPetsByStatus_ReturnListPetDTOs() {
-        when(petRepository.findAllByStatus(Pet.Status.valueOf("PENDING")))
-                .thenReturn(PETS);
+        when(petRepository.findAllByStatus(valueOf("PENDING"))).thenReturn(PETS);
         when(petMapper.toListDTOs(PETS)).thenReturn(PET_DTOS);
 
         List<PetDTO> petsByStatus = petService.findPetsByStatus("PENDING");
 
         assertNotNull(petsByStatus);
         assertEquals(PET_DTOS, petsByStatus);
+        verify(petRepository).findAllByStatus(valueOf("PENDING"));
     }
 
     @Test
-    public void findPetsByStatus_ThrowIllegalArgumentException() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+    public void findPetsByStatus_ThrowInvalidStatusException() {
+        InvalidStatusException exception = assertThrows(InvalidStatusException.class,
                 () -> petService.findPetsByStatus("none"));
 
-        assertEquals("Invalid status value", exception.getMessage());
+        assertEquals(INVALID_STATUS_VALUE, exception.getMessage());
     }
 
     @Test
@@ -87,20 +94,20 @@ public class PetServiceImplTest {
 
         PetDTO addedPetDTO = petService.addPet(PET_DTO);
 
+        verify(petRepository).save(pet);
         assertNotNull(addedPetDTO);
         assertEquals(PET_DTO, addedPetDTO);
-        verify(petRepository).save(pet);
     }
 
     @Test
     public void addPet_WhenInvalidCategory_ThenThrowEntityNotFoundException() {
         when(petMapper.toEntity(PET_DTO)).thenReturn(pet);
-        when(categoryRepository.findById(1L)).thenThrow(new EntityNotFoundException("Category with id '1L' not found."));
+        when(categoryRepository.findById(1L)).thenThrow(new EntityNotFoundException(format(CATEGORY_NOT_FOUND, 1L)));
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> petService.addPet(PET_DTO));
 
-        assertEquals("Category with id '1L' not found.", exception.getMessage());
+        assertEquals(format(CATEGORY_NOT_FOUND, 1L), exception.getMessage());
         verify(tagMapper, times(0)).toSetEntities(anySet());
     }
 

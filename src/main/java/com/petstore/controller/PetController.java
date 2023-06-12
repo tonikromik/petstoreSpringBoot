@@ -29,7 +29,7 @@ public class PetController implements PetControllerOpenApiWrapper {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnCreate.class)
-    @PostMapping(produces = APPLICATION_JSON_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public PetDTO addPet(@Valid @RequestBody PetDTO petDTO) {
         return petService.addPet(petDTO);

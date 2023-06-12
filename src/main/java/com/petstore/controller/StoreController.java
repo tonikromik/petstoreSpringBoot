@@ -20,13 +20,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class StoreController implements StoreControllerOpenApiWrapper {
 
     private final StoreService storeService;
-//    @PreAuthorize("hasRole('USER')")
+
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping(value = "/order", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         return storeService.saveOrder(orderDTO);
     }
+
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(value = "/order/{orderId}", produces = APPLICATION_JSON_VALUE)
     public OrderDTO findById(@PathVariable @Min(1) Long orderId) {
