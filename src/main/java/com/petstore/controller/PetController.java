@@ -7,7 +7,6 @@ import com.petstore.validation.OnUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +34,6 @@ public class PetController implements PetControllerOpenApiWrapper {
         return petService.addPet(petDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnUpdate.class)
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public PetDTO updateExistedPet(@Valid @RequestBody PetDTO petDTO) {

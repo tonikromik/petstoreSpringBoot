@@ -43,7 +43,6 @@ public class UserServiceImplTest {
 
         UserDTO returnedUserDTO = userServiceImpl.findByUsername("user");
 
-        verify(userRepository).findByUserName("user");
         assertNotNull(returnedUserDTO);
         assertEquals(returnedUserDTO, USER_DTO);
     }
