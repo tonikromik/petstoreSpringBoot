@@ -68,11 +68,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public UserDTO updateUser(String username, UserDTO userDTO) {
+    public UserDTO updateUser(UserDTO userDTO) {
+        String username = userDTO.getUserName();
         var currentUser = userRepository.findByUserName(username)
                 .orElseThrow(() -> new EntityNotFoundException(format(USER_NOT_FOUND, username)));
         userMapper.updateProperties(userDTO, currentUser);
-        log.info(format(USER_UPDATED, userDTO.getUserName()));
+        log.info(format(USER_UPDATED, username));
         return userMapper.toDTO(currentUser);
     }
 

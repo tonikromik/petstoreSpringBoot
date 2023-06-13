@@ -42,7 +42,7 @@ public class UserServiceTestFactory {
 
     static final UserDTO USER_DTO2 = UserDTO.builder()
             .id(2L)
-            .userName("user2")
+            .userName("user")
             .firstName("first2")
             .lastName("last2")
             .email("email2@gmail.com")

@@ -5,6 +5,7 @@ import com.petstore.service.UserService;
 import com.petstore.validation.OnCreate;
 import com.petstore.validation.OnUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController implements UserControllerOpenApiWrapper {
 
     private final UserService userService;
+    private static final String USERNAME_EXCEPTION = "Parameter of 'username' is not the same as username in dto object";
 
     @Validated(OnCreate.class)
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -40,7 +42,11 @@ public class UserController implements UserControllerOpenApiWrapper {
     @Validated(OnUpdate.class)
     @PutMapping(value = "/{username}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
-        return userService.updateUser(username, userDTO);
+        if (username.equals(userDTO.getUserName())) {
+            return userService.updateUser(userDTO);
+        } else {
+            throw new ValidationException(USERNAME_EXCEPTION);
+        }
     }
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{username}")
