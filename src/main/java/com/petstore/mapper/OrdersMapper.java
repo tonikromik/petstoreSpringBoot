@@ -1,13 +1,13 @@
 package com.petstore.mapper;
 
-import com.petstore.dto.OrdersDTO;
-import com.petstore.entity.Orders;
+import com.petstore.dto.OrderDTO;
+import com.petstore.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = PetMapper.class)
-public interface OrdersMapper extends GenericMapper<OrdersDTO, Orders>{
+public interface OrdersMapper extends GenericMapper<OrderDTO, Order>{
     @Mapping(target = "shipDate", expression = "java(java.time.LocalDateTime.now())")
     @Override
-    Orders toEntity(OrdersDTO dto);
+    Order toEntity(OrderDTO dto);
 }

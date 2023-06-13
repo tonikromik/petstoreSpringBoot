@@ -1,9 +1,9 @@
 INSERT INTO users (id, email, first_name, last_name, password, phone, user_name, user_status)
 VALUES (1, 'roman@gmail.com', 'Roman', 'Antonov', 'admin', '01', 'Roman', 1);
 INSERT INTO users (id, email, first_name, last_name, password, phone, user_name, user_status)
-VALUES (2, 'user2@gmail.com', 'secondtuser', 'lastuser', 'user', '01', 'user2', 1);
+VALUES (2, 'user2@gmail.com', 'secondtuser', 'lastuser', 'user', '01', 'user', 1);
 INSERT INTO users (id, email, first_name, last_name, password, phone, user_name, user_status)
-VALUES (3, 'user3@gmail.com', 'thirduser', 'lastuser', 'user', '01', 'user3', 1);
+VALUES (3, 'user3@gmail.com', 'thirduser', 'lastuser', 'admin', '01', 'admin', 1);
 INSERT INTO users (id, email, first_name, last_name, password, phone, user_name, user_status)
 VALUES (4, 'user4@gmail.com', '4user', 'lastuser', 'user', '01', 'user4', 1);
 INSERT INTO users (id, email, first_name, last_name, password, phone, user_name, user_status)

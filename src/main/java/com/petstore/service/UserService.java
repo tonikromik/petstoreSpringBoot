@@ -26,12 +26,11 @@ public interface UserService {
     UserDTO findByUsername(String username);
 
     /**
-     * Updates the details of an existing user with the given username.
+     * Updates the details of an existing user.
      *
-     * @param username the username of the user to be updated
      * @param userDTO  the data transfer object containing the updated user details
      */
-    UserDTO updateUser(String username, UserDTO userDTO);
+    UserDTO updateUser(UserDTO userDTO);
 
     /**
      * Deletes a user with the given username.

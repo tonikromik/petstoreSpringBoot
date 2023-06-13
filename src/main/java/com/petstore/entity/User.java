@@ -3,6 +3,7 @@ package com.petstore.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.*;
 
 @Getter
@@ -13,7 +14,7 @@ import static jakarta.persistence.GenerationType.*;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "users_seq")
     @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", initialValue = 8)
@@ -39,4 +40,12 @@ public class User extends BaseEntity{
 
     @Column(name = "user_status", nullable = false)
     private Integer userStatus;
+
+    @Enumerated(STRING)
+    @Column(name = "user_role", nullable = false)
+    private Role role;
+    public enum Role {
+        USER,
+        ADMIN
+    }
 }
