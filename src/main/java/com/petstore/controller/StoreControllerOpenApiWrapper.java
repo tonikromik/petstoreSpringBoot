@@ -25,17 +25,18 @@ public interface StoreControllerOpenApiWrapper {
                             examples = {@ExampleObject(value = """
                                     {
                                       "pet": {
-                                            "id": 5,
-                                            "name": "Cat3",
-                                            "category": {
-                                                "id": 1,
-                                                "name": "cat"
-                                                },
-                                            "photoUrls": [
-                                                "url51"
-                                                ],
-                                            "tags": [],
-                                            "status": "AVAILABLE"
+                                             "id": 5,
+                                             "name": "Cat3",
+                                             "category": {
+                                                 "id": 1,
+                                                 "name": "cat"
+                                             },
+                                             "photoUrls": [
+                                                 "tree12.jpg",
+                                                 "url51"
+                                             ],
+                                             "tags": [],
+                                             "status": "AVAILABLE"
                                             },
                                       "quantity": 1,
                                       "status": "PLACED",
@@ -44,10 +45,7 @@ public interface StoreControllerOpenApiWrapper {
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid Order", content = @Content)
             },
-            security = {
-                    @SecurityRequirement(name = "BasicAuth"),
-                    @SecurityRequirement(name = "BearerAuth")
-            }
+            security = {@SecurityRequirement(name = "BearerAuth")}
     )
     OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO);
 
@@ -63,10 +61,7 @@ public interface StoreControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
             },
-            security = {
-                    @SecurityRequirement(name = "BasicAuth"),
-                    @SecurityRequirement(name = "BearerAuth")
-            }
+            security = {@SecurityRequirement(name = "BearerAuth")}
     )
     OrderDTO findById(@PathVariable @Min(1) Long orderId);
 
@@ -77,10 +72,7 @@ public interface StoreControllerOpenApiWrapper {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
                     @ApiResponse(responseCode = "404", description = "Order not found")
             },
-            security = {
-                    @SecurityRequirement(name = "BasicAuth"),
-                    @SecurityRequirement(name = "BearerAuth")
-            }
+            security = {@SecurityRequirement(name = "BearerAuth")}
     )
     void deleteById(@PathVariable @Min(1) Long orderId);
 }
