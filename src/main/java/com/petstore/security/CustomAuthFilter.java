@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -33,18 +32,13 @@ public class CustomAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        try {
-            if (authHeader == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            } else {
-                checkIfAuthenticated(authHeader);
-                checkIfAuthorized(authHeader);
-            }
-        } catch (AuthenticationException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (authHeader != null) {
+            checkIfAuthenticated(authHeader);
+            checkIfAuthorized(authHeader);
         }
         filterChain.doFilter(request, response);
     }
+
     private void checkIfAuthenticated(String authHeader) {
         if (authHeader.startsWith("Basic ")) {
             jwt = authHeader.substring(6);
@@ -54,6 +48,7 @@ public class CustomAuthFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
     }
+
     private void checkIfAuthorized(String authHeader) {
         if (authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
