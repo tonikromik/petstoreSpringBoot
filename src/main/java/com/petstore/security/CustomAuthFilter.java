@@ -34,12 +34,12 @@ public class CustomAuthFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         try {
-            if (authHeader == null || !authHeader.startsWith("Basic ") && !authHeader.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
-                return;
+            if (authHeader == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            } else {
+                checkIfAuthenticated(authHeader);
+                checkIfAuthorized(authHeader);
             }
-            checkIfAuthenticated(authHeader);
-            checkIfAuthorized(authHeader);
         } catch (AuthenticationException ex) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
