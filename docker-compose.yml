@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: db
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=petstore
+    ports:
+      - "3307:3306"
+    volumes:
+      - petstore_data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  petstore:
+    container_name: petstore
+    image: petstore
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    entrypoint: bash -c "sleep 20 && java -jar petstore.jar"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_PORT:3307
+    volumes:
+      - petstore_data:/uploads
+    networks:
+      - mynetwork
+volumes:
+  petstore_data:
+
+networks:
+  mynetwork:
+    driver: bridge
