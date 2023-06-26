@@ -25,5 +25,6 @@ public class CategoryDTO extends BaseDTO {
     private String name;
 
     @JsonIgnore
+    @Builder.Default
     private List<Pet> pets = new ArrayList<>();
 }

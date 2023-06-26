@@ -26,6 +26,7 @@ public class Category extends BaseEntity {
     @Column(name = "category_name", nullable = false)
     private String name;
 
+    @Builder.Default
     @OneToMany(mappedBy = "category", cascade = {PERSIST, MERGE})
     private List<Pet> pets = new ArrayList<>();
 }

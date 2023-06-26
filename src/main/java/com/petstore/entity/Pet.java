@@ -33,11 +33,13 @@ public class Pet extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name = "pet_urls", joinColumns = @JoinColumn(name = "pet_id", referencedColumnName = "id"))
     @Column(name = "photo_url")
     private Set<String> photoUrls = new HashSet<>();
 
+    @Builder.Default
     @Setter(AccessLevel.PRIVATE)
     @ManyToMany
     @JoinTable(
