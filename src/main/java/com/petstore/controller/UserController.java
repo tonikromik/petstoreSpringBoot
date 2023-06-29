@@ -38,6 +38,7 @@ public class UserController implements UserControllerOpenApiWrapper {
     public UserDTO findUserByUsername(@PathVariable String username) {
         return userService.findByUsername(username);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnUpdate.class)
     @PutMapping(value = "/{username}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -48,12 +49,14 @@ public class UserController implements UserControllerOpenApiWrapper {
             throw new ValidationException(USERNAME_EXCEPTION);
         }
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{username}")
     @ResponseStatus(NO_CONTENT) //by default return OK
     public void deleteUserByUsername(@PathVariable String username) {
         userService.deleteUser(username);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnCreate.class)
     @PostMapping(value = "/createWithList", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
