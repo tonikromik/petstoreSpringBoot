@@ -30,9 +30,11 @@ public class PetDTO extends BaseDTO {
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Category is required")
     private CategoryDTO category;
 
+    @Builder.Default
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Urls are required")
     private Set<String> photoUrls = new HashSet<>();
 
+    @Builder.Default
     private Set<TagDTO> tags = new HashSet<>();
 
     @Null(groups = OnCreate.class)

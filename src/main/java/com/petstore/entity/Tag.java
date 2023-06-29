@@ -25,6 +25,7 @@ public class Tag extends BaseEntity {
     @Column(name = "tag_name", nullable = false)
     private String name;
 
+    @Builder.Default
     @Setter(AccessLevel.PRIVATE)
     @ManyToMany(mappedBy = "tags", cascade = CascadeType.PERSIST)
     private List<Pet> pets = new ArrayList<>();
