@@ -29,12 +29,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    public static final String USER_NOT_FOUND = "User with username '%s' not found.";
+    public static final String USER_ALREADY_EXIST = "User with username '%s' or email '%s' already exists.";
+    public static final String SOME_USER_ALREADY_EXIST = "Some user already exist.";
+    public static final String EMPTY_USER_DTOS = "The userDTOs cannot be empty";
     private static final String USER_SAVED = "User with username '%s' saved.";
     private static final String USER_UPDATED = "User with username '%s' updated.";
     private static final String USER_DELETED = "User with username '%s' deleted.";
-    private static final String USER_NOT_FOUND = "User with username '%s' not found.";
-    private static final String USER_ALREADY_EXIST = "User with username '%s' or email '%s' already exists.";
-    private static final String SOME_USER_ALREADY_EXIST = "Some user already exist.";
 
     /**
      * {@inheritDoc}
@@ -95,6 +96,9 @@ public class UserServiceImpl implements UserService {
 // with Transactional I can`t handle DataIntegrityViolationException with my message
     @Override
     public void createAll(List<UserDTO> usersDTOs) {
+        if (usersDTOs.isEmpty()){
+            throw new IllegalArgumentException(format(EMPTY_USER_DTOS));
+        }
         try {
             userRepository.saveAll(userMapper.toListEntities(usersDTOs));
         } catch (DataAccessException e) {

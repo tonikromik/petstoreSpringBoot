@@ -34,15 +34,14 @@ public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final CategoryRepository categoryRepository;
     private final PetMapper petMapper;
-    private static final String INVALID_STATUS_VALUE = "Invalid status value";
-    private static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
+    public static final String INVALID_STATUS_VALUE = "Invalid status value";
+    public static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
+    public static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
+    public static final String FILE_EXIST = "A file with name '%s' already exists.";
     private static final String PET_ADDED = "Pet with id '%d' added.";
     private static final String PET_UPDATED = "Pet with id '%d' updated.";
     private static final String PET_DELETED = "Pet with id '%d' deleted.";
     private static final String IMAGE_UPLOADED = "Image for pet with id '%d' uploaded.";
-    private static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
-    private static final String FILE_EXIST = "A file with name '%s' already exists.";
-
 
     /**
      * {@inheritDoc}

@@ -8,6 +8,9 @@ server:
     include-message: always
 
 spring:
+  profiles:
+    active: test
+
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/petstore
     username: ${MYSQL_USER:root}
