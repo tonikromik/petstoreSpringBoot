@@ -129,5 +129,5 @@ public interface UserControllerOpenApiWrapper {
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
     @Validated(OnCreate.class)
-    void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList);
+    void createUsersWithList(@Valid @RequestBody List<@Valid UserDTO> userDTOList);
 }

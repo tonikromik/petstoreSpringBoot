@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController implements UserControllerOpenApiWrapper {
 
     private final UserService userService;
-    private static final String USERNAME_EXCEPTION = "Parameter of 'username' is not the same as username in dto object";
+    public static final String USERNAME_EXCEPTION = "Parameter of 'username' is not the same as username in dto object";
 
     @Validated(OnCreate.class)
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -59,9 +59,9 @@ public class UserController implements UserControllerOpenApiWrapper {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Validated(OnCreate.class)
-    @PostMapping(value = "/createWithList", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/createWithList", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
-    public void createUsersWithList(@Valid @RequestBody List<UserDTO> userDTOList) {
+    public void createUsersWithList(@Valid @RequestBody List<@Valid UserDTO> userDTOList) {
         userService.createAll(userDTOList);
     }
 }

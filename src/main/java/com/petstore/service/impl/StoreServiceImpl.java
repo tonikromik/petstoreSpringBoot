@@ -20,13 +20,13 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
+    public static final String ORDER_NOT_FOUND = "Order with id '%d' not found.";
+    public static final String ORDER_SAVED = "Order with id '%d' saved.";
+    public static final String ORDER_DELETED = "Order with id '%d' deleted.";
 
     private final StoreRepository storeRepository;
     private final OrderMapper orderMapper;
 
-    private static final String ORDER_NOT_FOUND = "Order with id '%d' not found.";
-    private static final String ORDER_SAVED = "Order with id '%d' saved.";
-    private static final String ORDER_DELETED = "Order with id '%d' deleted.";
 
     /**
      * {@inheritDoc}
