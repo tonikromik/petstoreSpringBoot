@@ -16,8 +16,10 @@ import java.nio.file.Paths;
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(title = "Petstore API", version = "1.0.0", description = "This is a sample server Petstore server."),
-        servers = @Server(url = "http://localhost:8080")
-
+        servers = {
+                @Server(url = "http://23.21.28.163:8080", description = "Production"),
+                @Server(url = "http://localhost:8080", description = "Local")
+        }
 )
 @SecurityScheme(
         name = "BasicAuth",

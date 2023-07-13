@@ -16,12 +16,9 @@ services:
 
   petstore:
     container_name: petstore
-    image: petstore
+    image: tonikromik/petstore
     depends_on:
       - db
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     entrypoint: bash -c "sleep 20 && java -jar petstore.jar"
