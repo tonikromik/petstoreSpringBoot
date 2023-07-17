@@ -16,7 +16,7 @@ services:
 
   petstore:
     container_name: petstore
-    image: tonikromik/petstore
+    image: tonikromik/petstore:latest
     depends_on:
       - db
     ports:

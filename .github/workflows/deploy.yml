@@ -1,0 +1,42 @@
+name: Deploy to EC2 Instance
+on:
+  workflow_dispatch:
+    inputs:
+      perform_deploy:
+        description: 'Perform deployment'
+        required: true
+        type: boolean
+
+env:
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.perform_deploy == 'true'
+    steps:
+      - name: Deployment
+        run: |
+          echo "Deployment is approved. Starting deployment..."
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Copy docker-compose.yml to EC2 instance
+        uses: appleboy/scp-action@master
+        with:
+          host: ec2-23-21-28-163.compute-1.amazonaws.com
+          username: ec2-user
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          source: ./docker-compose.yml
+          target: ~/docker/
+      - name: SSH to EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-23-21-28-163.compute-1.amazonaws.com
+          username: ec2-user
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/docker
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d

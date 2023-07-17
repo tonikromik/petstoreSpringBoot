@@ -1,4 +1,5 @@
 FROM openjdk:17
 WORKDIR /app
-COPY build/libs/petstore-0.0.1-SNAPSHOT.jar petstore.jar
+ARG PROJECT_VERSION
+COPY build/libs/petstore-$PROJECT_VERSION.jar petstore.jar
 ENTRYPOINT ["java", "-jar", "petstore.jar"]
