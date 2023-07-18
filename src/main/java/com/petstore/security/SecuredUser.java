@@ -1,14 +1,13 @@
 package com.petstore.security;
 
 import com.petstore.entity.User;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @EqualsAndHashCode
 public class SecuredUser implements UserDetails {

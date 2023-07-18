@@ -1,21 +1,25 @@
 package com.petstore.controller;
 
-import com.petstore.dto.PetDTO;
-import jakarta.validation.constraints.NotNull;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
 import static com.petstore.testdatafactory.PetTestFactory.TEST_PET_DTO_FOR_CREATE;
 import static com.petstore.testdatafactory.PetTestFactory.TEST_PET_DTO_UPDATED;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import com.petstore.dto.PetDto;
+import jakarta.validation.constraints.NotNull;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @DirtiesContext
@@ -27,16 +31,16 @@ public class PetControllerTest {
 
     @Autowired
     private WebServiceTestClient serviceTestClient;
-    private PetDTO createdPetDTO;
+    private PetDto createdPetDto;
 
     @Test
     @Order(1)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
     public void shouldCreatePetWhenAuthorizedAsAdmin() {
-        createdPetDTO = serviceTestClient.addPet(TEST_PET_DTO_FOR_CREATE)
+        createdPetDto = serviceTestClient.addPet(TEST_PET_DTO_FOR_CREATE)
                 .expectStatus().isCreated()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(PetDTO.class)
+                .expectBody(PetDto.class)
                 .consumeWith(response ->
                         assertThat(requireNonNull(response.getResponseBody()).getId()).isEqualTo(8L))
                 .returnResult().getResponseBody();
@@ -61,8 +65,8 @@ public class PetControllerTest {
     @Order(4)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
     public void shouldRejectPetCreatingForNotValidPetWhenAuthorizedAsAdmin() {
-        var petDTO = new PetDTO();
-        serviceTestClient.addPet(petDTO)
+        var petDto = new PetDto();
+        serviceTestClient.addPet(petDto)
                 .expectStatus().isBadRequest();
     }
 
@@ -73,7 +77,7 @@ public class PetControllerTest {
         serviceTestClient.updateExistedPet(TEST_PET_DTO_UPDATED)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(PetDTO.class)
+                .expectBody(PetDto.class)
                 .consumeWith(response -> {
                     var received = response.getResponseBody();
                     equals(received, TEST_PET_DTO_UPDATED);
@@ -98,9 +102,9 @@ public class PetControllerTest {
     @Test
     @Order(8)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
-    public void shouldRejectExistedPetUpdatingWhenAuthorizedAsAdminAndInvalidPetDTO() {
-        var petDTO = new PetDTO();
-        serviceTestClient.updateExistedPet(petDTO)
+    public void shouldRejectExistedPetUpdatingWhenAuthorizedAsAdminAndInvalidPetDto() {
+        var petDto = new PetDto();
+        serviceTestClient.updateExistedPet(petDto)
                 .expectStatus().isBadRequest();
     }
 
@@ -111,7 +115,7 @@ public class PetControllerTest {
         serviceTestClient.findPetByStatus(status)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBodyList(PetDTO.class).hasSize(2);
+                .expectBodyList(PetDto.class).hasSize(2);
     }
 
     @Test
@@ -125,14 +129,14 @@ public class PetControllerTest {
     @Test
     @Order(11)
     public void shouldFindById() {
-        var id = createdPetDTO.getId();
+        var id = createdPetDto.getId();
         serviceTestClient.findPetById(id)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(PetDTO.class)
+                .expectBody(PetDto.class)
                 .consumeWith(response -> {
                     var received = response.getResponseBody();
-                    equals(received, createdPetDTO);
+                    equals(received, createdPetDto);
                 });
     }
 
@@ -162,7 +166,7 @@ public class PetControllerTest {
         serviceTestClient.updatePetWithFormDataById(id, name, status)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(PetDTO.class)
+                .expectBody(PetDto.class)
                 .consumeWith(responce -> {
                     var received = responce.getResponseBody();
                     assertThat(requireNonNull(received).getId()).isEqualTo(id);
@@ -213,12 +217,12 @@ public class PetControllerTest {
     @Order(19)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
     public void shouldDeletePetByIdWhenAuthorizedAsAdmin() {
-        var id = createdPetDTO.getId();
+        var id = createdPetDto.getId();
         serviceTestClient.deletePetById(id)
                 .expectStatus().isNoContent();
     }
 
-    private void equals(PetDTO received, @NotNull PetDTO expected) {
+    private void equals(PetDto received, @NotNull PetDto expected) {
         assertThat(received).isNotNull();
         assertThat(received.getId()).isEqualTo(expected.getId());
         assertThat(received.getName()).isEqualTo(expected.getName());

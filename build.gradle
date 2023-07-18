@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version "${spring_boot_starter}"
 	id 'io.spring.dependency-management' version "${spring_dependency_management}"
+	id 'checkstyle'
 }
 
 group = 'com'
@@ -21,6 +22,11 @@ repositories {
 	mavenCentral()
 }
 
+checkstyle {
+	toolVersion = '10.2'
+	configFile = rootProject.file("checkstyle.xml")
+}
+
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-web:${spring_boot_starter}"
 	implementation "org.springframework.boot:spring-boot-starter-webflux:${spring_boot_starter}"
@@ -32,6 +38,7 @@ dependencies {
 	implementation "org.flywaydb:flyway-core:${flyway_core}"
 	implementation "org.flywaydb:flyway-mysql:${flyway_mysql}"
 	implementation "org.mapstruct:mapstruct:${mapstruct}"
+	implementation "com.google.code.findbugs:jsr305:${jsr305}" //for fix WHEN.MAYBE java compiling exception
 
 	compileOnly "org.projectlombok:lombok:${lombok}"
 

@@ -1,28 +1,39 @@
 package com.petstore.service;
 
-import com.petstore.dto.UserDTO;
+import static com.petstore.service.impl.UserServiceImpl.SOME_USER_ALREADY_EXIST;
+import static com.petstore.service.impl.UserServiceImpl.USER_ALREADY_EXIST;
+import static com.petstore.service.impl.UserServiceImpl.USER_NOT_FOUND;
+import static com.petstore.testdatafactory.UserTestFactory.TEST_USER;
+import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO;
+import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_FOR_UPDATE;
+import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_LIST;
+import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_LIST;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.petstore.dto.UserDto;
 import com.petstore.entity.User;
 import com.petstore.mapper.UserMapper;
 import com.petstore.repository.UserRepository;
 import com.petstore.service.impl.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import java.util.Optional;
-
-import static com.petstore.service.impl.UserServiceImpl.*;
-import static com.petstore.testdatafactory.UserTestFactory.*;
-import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -34,14 +45,14 @@ public class UserServiceImplTest {
     private UserServiceImpl userServiceImpl;
 
     @Test
-    public void findByUsername_ReturnUserDTO() {
+    public void findByUsername_ReturnUserDto() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(TEST_USER));
-        when(userMapper.toDTO(any(User.class))).thenReturn(TEST_USER_DTO);
+        when(userMapper.toDto(any(User.class))).thenReturn(TEST_USER_DTO);
 
-        UserDTO returnedUserDTO = userServiceImpl.findByUsername("user");
+        var returnedUserDto = userServiceImpl.findByUsername("user");
 
-        assertNotNull(returnedUserDTO);
-        assertEquals(returnedUserDTO, TEST_USER_DTO);
+        assertNotNull(returnedUserDto);
+        assertEquals(returnedUserDto, TEST_USER_DTO);
     }
 
     @Test
@@ -57,16 +68,16 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void createUser_ReturnUserDTO() {
+    public void createUser_ReturnUserDto() {
         when(userRepository.save(any(User.class))).thenReturn(TEST_USER);
-        when(userMapper.toDTO(any(User.class))).thenReturn(TEST_USER_DTO);
-        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(TEST_USER);
+        when(userMapper.toDto(any(User.class))).thenReturn(TEST_USER_DTO);
+        when(userMapper.toEntity(any(UserDto.class))).thenReturn(TEST_USER);
 
-        UserDTO returnedUserDTO = userServiceImpl.createUser(TEST_USER_DTO);
+        var returnedUserDto = userServiceImpl.createUser(TEST_USER_DTO);
 
         verify(userRepository).save(TEST_USER);
-        assertNotNull(returnedUserDTO);
-        assertEquals(TEST_USER_DTO, returnedUserDTO);
+        assertNotNull(returnedUserDto);
+        assertEquals(TEST_USER_DTO, returnedUserDto);
     }
 
 
@@ -74,7 +85,7 @@ public class UserServiceImplTest {
     public void createUser_ThrowDataIntegrityViolationException() {
         when(userRepository.save(any(User.class))).thenThrow(
                 new DataIntegrityViolationException(format(USER_ALREADY_EXIST, "user", "user2@gmail.com")));
-        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(TEST_USER);
+        when(userMapper.toEntity(any(UserDto.class))).thenReturn(TEST_USER);
 
         var exception = assertThrows(DataIntegrityViolationException.class,
                 () -> userServiceImpl.createUser(TEST_USER_DTO));
@@ -84,16 +95,16 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updateUser_ReturnUserDTO() {
+    public void updateUser_ReturnUserDto() {
         when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(TEST_USER));
-        when(userMapper.toDTO(TEST_USER)).thenReturn(TEST_USER_DTO_FOR_UPDATE);
+        when(userMapper.toDto(TEST_USER)).thenReturn(TEST_USER_DTO_FOR_UPDATE);
 
-        UserDTO updatedUser = userServiceImpl.updateUser(TEST_USER_DTO_FOR_UPDATE);
+        var updatedUser = userServiceImpl.updateUser(TEST_USER_DTO_FOR_UPDATE);
 
         verify(userRepository).findByUserName("user");
         verify(userMapper).updateProperties(TEST_USER_DTO_FOR_UPDATE, TEST_USER);
-        verify(userMapper).toDTO(TEST_USER);
         assertEquals(TEST_USER_DTO_FOR_UPDATE, updatedUser);
+        verify(userMapper).toDto(TEST_USER);
     }
 
     @Test
@@ -138,7 +149,7 @@ public class UserServiceImplTest {
         when(userRepository.saveAll(anyList())).thenThrow(
                 new DataIntegrityViolationException(format(SOME_USER_ALREADY_EXIST)));
 
-        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class,
+        var exception = assertThrows(DataIntegrityViolationException.class,
                 () -> userServiceImpl.createAll(TEST_USER_DTO_LIST));
 
         verify(userRepository).saveAll(anyList());

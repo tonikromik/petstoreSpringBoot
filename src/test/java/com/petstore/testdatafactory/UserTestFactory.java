@@ -1,12 +1,12 @@
 package com.petstore.testdatafactory;
 
-import com.petstore.dto.UserDTO;
-import com.petstore.entity.User;
+import static com.petstore.entity.User.Role.ADMIN;
+import static com.petstore.entity.User.Role.USER;
 
+import com.petstore.dto.UserDto;
+import com.petstore.entity.User;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.petstore.entity.User.Role.*;
 
 public class UserTestFactory {
 
@@ -35,7 +35,7 @@ public class UserTestFactory {
             .build();
 
 
-    public static final UserDTO TEST_USER_DTO = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO = UserDto.builder()
             .id(2L)
             .userName("user")
             .firstName("seconduser")
@@ -46,7 +46,7 @@ public class UserTestFactory {
             .userStatus(1)
             .build();
 
-    public static final UserDTO TEST_USER_DTO2 = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO2 = UserDto.builder()
             .id(3L)
             .userName("admin")
             .firstName("thirduser")
@@ -57,7 +57,7 @@ public class UserTestFactory {
             .userStatus(1)
             .build();
 
-    public static final UserDTO TEST_USER_DTO_FOR_CREATE = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO_FOR_CREATE = UserDto.builder()
             .userName("userforcreate1")
             .firstName("third")
             .lastName("third")
@@ -67,7 +67,7 @@ public class UserTestFactory {
             .userStatus(1)
             .build();
 
-    public static final UserDTO TEST_USER_DTO2_FOR_CREATE = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO2_FOR_CREATE = UserDto.builder()
             .userName("userforcreate2")
             .firstName("seconduser")
             .lastName("admin")
@@ -76,7 +76,7 @@ public class UserTestFactory {
             .phone("03")
             .userStatus(1)
             .build();
-    public static final UserDTO TEST_USER_DTO3_FOR_CREATE = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO3_FOR_CREATE = UserDto.builder()
             .userName("userforcreate3")
             .firstName("thirduser")
             .lastName("user")
@@ -86,7 +86,7 @@ public class UserTestFactory {
             .userStatus(1)
             .build();
 
-    public static final UserDTO TEST_USER_DTO_FOR_UPDATE = UserDTO.builder()
+    public static final UserDto TEST_USER_DTO_FOR_UPDATE = UserDto.builder()
             .id(2L)
             .userName("user")
             .firstName("updated")
@@ -98,8 +98,8 @@ public class UserTestFactory {
             .build();
     public static final List<User> TEST_USER_LIST = Arrays.asList(TEST_USER, TEST_USER2);
 
-    public static final List<UserDTO> TEST_USER_DTO_LIST = Arrays.asList(TEST_USER_DTO, TEST_USER_DTO2);
+    public static final List<UserDto> TEST_USER_DTO_LIST = Arrays.asList(TEST_USER_DTO, TEST_USER_DTO2);
 
-    public static final List<UserDTO> TEST_USER_DTO_LIST_FOR_CREATE =
+    public static final List<UserDto> TEST_USER_DTO_LIST_FOR_CREATE =
             Arrays.asList(TEST_USER_DTO2_FOR_CREATE, TEST_USER_DTO3_FOR_CREATE);
 }

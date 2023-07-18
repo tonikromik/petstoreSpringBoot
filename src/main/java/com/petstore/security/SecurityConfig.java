@@ -44,32 +44,3 @@ public class SecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
 }
-
-/*
-All:
-    PetController:
-        - find pet by id
-        - find pets by status
-    UserController:
-        - login
-	    - logout
-	    - create user
-USER_ROLE(previous + ):
-    StoreController:
-        - place an order
-        - find order by id
-ADMIN_ROLE(previous + ):
-    PetController:
-        - add new pet
-        - update pet
-        - update pet with form data
-        - delete pet
-        - uploadImage
-    UserController:
-        - find user
-        - create users with list
-        - update user
-        - delete user
-    StoreController:
-        - delete order
- */

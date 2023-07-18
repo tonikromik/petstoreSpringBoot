@@ -38,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> IllegalArgumentException(
+    public ResponseEntity<?> illegalArgumentException(
             IllegalArgumentException ex,
             WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), NO_HEADERS, HttpStatus.BAD_REQUEST, request);

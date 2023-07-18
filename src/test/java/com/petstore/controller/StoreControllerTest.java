@@ -1,6 +1,13 @@
 package com.petstore.controller;
 
-import com.petstore.dto.OrderDTO;
+import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO;
+import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO_FOR_SAVE;
+import static java.util.Objects.requireNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import com.petstore.dto.OrderDto;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -12,13 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-
-import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO;
-import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO_FOR_SAVE;
-import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
 @DirtiesContext
@@ -39,7 +39,7 @@ public class StoreControllerTest {
         serviceTestClient.saveOrder(TEST_ORDER_DTO_FOR_SAVE)
                 .expectStatus().isCreated()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(OrderDTO.class)
+                .expectBody(OrderDto.class)
                 .consumeWith(response ->
                         assertThat(requireNonNull(response.getResponseBody()).getId()).isEqualTo(5L));
     }
@@ -48,8 +48,8 @@ public class StoreControllerTest {
     @Order(2)
     @WithMockUser(username = "user", authorities = {"ROLE_USER", "ROLE_ADMIN"})
     public void shouldRejectOrderCreatingForNotValidOrder() {
-        OrderDTO invalidOrderDTO = new OrderDTO();
-        serviceTestClient.saveOrder(invalidOrderDTO)
+        OrderDto invalidOrderDto = new OrderDto();
+        serviceTestClient.saveOrder(invalidOrderDto)
                 .expectStatus().isBadRequest();
     }
 
@@ -68,7 +68,7 @@ public class StoreControllerTest {
         serviceTestClient.findOrderById(id)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(OrderDTO.class)
+                .expectBody(OrderDto.class)
                 .consumeWith(response -> {
                     var received = response.getResponseBody();
                     assertThat(received).isNotNull();

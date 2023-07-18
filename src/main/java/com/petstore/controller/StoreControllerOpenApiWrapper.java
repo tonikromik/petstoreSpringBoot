@@ -1,6 +1,6 @@
 package com.petstore.controller;
 
-import com.petstore.dto.OrderDTO;
+import com.petstore.dto.OrderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -21,7 +21,7 @@ public interface StoreControllerOpenApiWrapper {
             tags = {"store"},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "order placed for purchasing the pet",
-                    content = @Content(schema = @Schema(implementation = OrderDTO.class),
+                    content = @Content(schema = @Schema(implementation = OrderDto.class),
                             examples = {@ExampleObject(value = """
                                     {
                                       "pet": {
@@ -47,26 +47,29 @@ public interface StoreControllerOpenApiWrapper {
             },
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
-    OrderDTO createOrder(@Valid @RequestBody OrderDTO orderDTO);
+    OrderDto createOrder(@Valid @RequestBody OrderDto orderDto);
 
     @Operation(summary = "Find purchase order by ID",
-            description = "For valid response try integer IDs with value >=1 and <= 5. Other values will generated exceptions",
+            description = "For valid response try integer IDs with value >=1 and <= 5. "
+                   + "Other values will generated exceptions",
             tags = {"store"},
             parameters = {
-                    @Parameter(name = "orderId", description = "ID of order that needs to be fetched", in = ParameterIn.PATH)
+                    @Parameter(name = "orderId", description = "ID of order that needs to be fetched",
+                            in = ParameterIn.PATH)
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation",
-                            content = @Content(schema = @Schema(implementation = OrderDTO.class))),
+                            content = @Content(schema = @Schema(implementation = OrderDto.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
             },
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
-    OrderDTO findById(@PathVariable @Min(1) Long orderId);
+    OrderDto findById(@PathVariable @Min(1) Long orderId);
 
     @Operation(summary = "Delete purchase order by ID",
-            description = "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+            description = "For valid response try integer IDs with positive integer value. "
+                   + "Negative or non-integer values will generate API errors",
             tags = {"store"},
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),

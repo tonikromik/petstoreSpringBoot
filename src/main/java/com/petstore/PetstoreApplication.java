@@ -5,17 +5,17 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 @SpringBootApplication
 @OpenAPIDefinition(
-        info = @Info(title = "Petstore API", version = "1.0.0", description = "This is a sample server Petstore server."),
+        info = @Info(title = "Petstore API", version = "1.0.0",
+                description = "This is a sample server Petstore server."),
         servers = {
                 @Server(url = "http://23.21.28.163:8080", description = "Production"),
                 @Server(url = "http://localhost:8080", description = "Local")

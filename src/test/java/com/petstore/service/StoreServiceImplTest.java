@@ -1,26 +1,30 @@
 package com.petstore.service;
 
-import com.petstore.dto.OrderDTO;
+import static com.petstore.service.impl.StoreServiceImpl.ORDER_NOT_FOUND;
+import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER;
+import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.petstore.dto.OrderDto;
 import com.petstore.mapper.OrderMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.impl.StoreServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
-
-import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER;
-import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO;
-import static com.petstore.service.impl.StoreServiceImpl.ORDER_NOT_FOUND;
-import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceImplTest {
@@ -32,15 +36,15 @@ public class StoreServiceImplTest {
     private StoreServiceImpl storeService;
 
     @Test
-    public void findById_ReturnOrdersDTO() {
+    public void findById_ReturnOrdersDto() {
         when(storeRepository.findAllFieldsById(1L)).thenReturn(Optional.of(TEST_ORDER));
-        when(ordersMapper.toDTO(TEST_ORDER)).thenReturn(TEST_ORDER_DTO);
+        when(ordersMapper.toDto(TEST_ORDER)).thenReturn(TEST_ORDER_DTO);
 
-        OrderDTO orderDTO = storeService.findById(1L);
+        OrderDto orderDto = storeService.findById(1L);
 
         verify(storeRepository).findAllFieldsById(1L);
-        assertNotNull(orderDTO);
-        assertEquals(TEST_ORDER_DTO, orderDTO);
+        assertNotNull(orderDto);
+        assertEquals(TEST_ORDER_DTO, orderDto);
     }
 
     @Test
@@ -56,12 +60,12 @@ public class StoreServiceImplTest {
     }
 
     @Test
-    public void saveOrder_ReturnOrdersDTO() {
+    public void saveOrder_ReturnOrdersDto() {
         when(ordersMapper.toEntity(any())).thenReturn(TEST_ORDER);
         when(storeRepository.save(any())).thenReturn(TEST_ORDER);
-        when(ordersMapper.toDTO(any())).thenReturn(TEST_ORDER_DTO);
+        when(ordersMapper.toDto(any())).thenReturn(TEST_ORDER_DTO);
 
-        OrderDTO savedOrder = storeService.saveOrder(TEST_ORDER_DTO);
+        OrderDto savedOrder = storeService.saveOrder(TEST_ORDER_DTO);
 
         verify(storeRepository).save(TEST_ORDER);
         assertNotNull(savedOrder);

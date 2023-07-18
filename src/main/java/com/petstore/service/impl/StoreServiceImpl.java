@@ -1,6 +1,8 @@
 package com.petstore.service.impl;
 
-import com.petstore.dto.OrderDTO;
+import static java.lang.String.format;
+
+import com.petstore.dto.OrderDto;
 import com.petstore.entity.Order;
 import com.petstore.mapper.OrderMapper;
 import com.petstore.repository.StoreRepository;
@@ -10,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static java.lang.String.format;
 
 /**
  * Implementation of {@link StoreService} interface for managing orders in a store.
@@ -33,10 +33,10 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional(readOnly = true)
     @Override
-    public OrderDTO findById(Long id) {
+    public OrderDto findById(Long id) {
         Order entity = storeRepository.findAllFieldsById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(ORDER_NOT_FOUND, id)));
-        return orderMapper.toDTO(entity);
+        return orderMapper.toDto(entity);
     }
 
     /**
@@ -44,10 +44,10 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional
     @Override
-    public OrderDTO saveOrder(OrderDTO orderDTO) {
-        Order saved = storeRepository.save(orderMapper.toEntity(orderDTO));
+    public OrderDto saveOrder(OrderDto orderDto) {
+        Order saved = storeRepository.save(orderMapper.toEntity(orderDto));
         log.info(format(ORDER_SAVED, saved.getId()));
-        return orderMapper.toDTO(saved);
+        return orderMapper.toDto(saved);
     }
 
     /**
