@@ -3,13 +3,15 @@ package com.petstore.controller;
 import static java.lang.String.format;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import com.petstore.dto.OrderDto;
-import com.petstore.dto.PetDto;
-import com.petstore.dto.UserDto;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import com.petstore.dto.OrderDto;
+import com.petstore.dto.PetDto;
+import com.petstore.dto.UserDto;
 
 @Component
 public class WebServiceTestClient {

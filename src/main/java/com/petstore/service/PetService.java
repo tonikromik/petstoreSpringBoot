@@ -1,8 +1,10 @@
 package com.petstore.service;
 
-import com.petstore.dto.PetDto;
 import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
+
+import com.petstore.dto.PetDto;
 
 /**
  * The PetService interface defines methods for managing pets.

@@ -1,5 +1,8 @@
 package com.petstore.controller;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.petstore.dto.OrderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,8 +15,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "store", description = "Access to Petstore orders")
 public interface StoreControllerOpenApiWrapper {
@@ -51,7 +52,7 @@ public interface StoreControllerOpenApiWrapper {
 
     @Operation(summary = "Find purchase order by ID",
             description = "For valid response try integer IDs with value >=1 and <= 5. "
-                   + "Other values will generated exceptions",
+                    + "Other values will generated exceptions",
             tags = {"store"},
             parameters = {
                     @Parameter(name = "orderId", description = "ID of order that needs to be fetched",
@@ -69,7 +70,7 @@ public interface StoreControllerOpenApiWrapper {
 
     @Operation(summary = "Delete purchase order by ID",
             description = "For valid response try integer IDs with positive integer value. "
-                   + "Negative or non-integer values will generate API errors",
+                    + "Negative or non-integer values will generate API errors",
             tags = {"store"},
             responses = {
                     @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),

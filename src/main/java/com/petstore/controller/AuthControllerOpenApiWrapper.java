@@ -1,10 +1,11 @@
 package com.petstore.controller;
 
+import java.io.IOException;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public interface AuthControllerOpenApiWrapper {
     @Operation(summary = "Login and generate token",

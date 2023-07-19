@@ -3,23 +3,20 @@ package com.petstore.service;
 import static com.petstore.entity.Pet.Status.valueOf;
 import static com.petstore.service.impl.PetServiceImpl.CATEGORY_NOT_FOUND;
 import static com.petstore.service.impl.PetServiceImpl.INVALID_STATUS_VALUE;
-import static com.petstore.testdatafactory.PetTestFactory.TEST_PETS;
-import static com.petstore.testdatafactory.PetTestFactory.TEST_PET_DTO;
-import static com.petstore.testdatafactory.PetTestFactory.TEST_PET_DTOS;
-import static com.petstore.testdatafactory.PetTestFactory.TEST_PET_DTO_UPDATED;
-import static com.petstore.testdatafactory.PetTestFactory.test_pet;
+import static com.petstore.testdatafactory.PetTestFactory.*;
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anySet;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.petstore.dto.PetDto;
 import com.petstore.entity.Pet;
@@ -30,13 +27,6 @@ import com.petstore.repository.CategoryRepository;
 import com.petstore.repository.PetRepository;
 import com.petstore.service.impl.PetServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class PetServiceImplTest {

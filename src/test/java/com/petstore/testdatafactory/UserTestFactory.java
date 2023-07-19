@@ -3,10 +3,11 @@ package com.petstore.testdatafactory;
 import static com.petstore.entity.User.Role.ADMIN;
 import static com.petstore.entity.User.Role.USER;
 
-import com.petstore.dto.UserDto;
-import com.petstore.entity.User;
 import java.util.Arrays;
 import java.util.List;
+
+import com.petstore.dto.UserDto;
+import com.petstore.entity.User;
 
 public class UserTestFactory {
 

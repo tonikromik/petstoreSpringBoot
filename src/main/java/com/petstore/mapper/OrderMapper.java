@@ -1,9 +1,10 @@
 package com.petstore.mapper;
 
-import com.petstore.dto.OrderDto;
-import com.petstore.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import com.petstore.dto.OrderDto;
+import com.petstore.entity.Order;
 
 @Mapper(componentModel = "spring", uses = PetMapper.class)
 public interface OrderMapper extends GenericMapper<OrderDto, Order> {

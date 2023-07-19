@@ -2,6 +2,17 @@ package com.petstore.service.impl;
 
 import static java.lang.String.format;
 
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.petstore.dto.PetDto;
 import com.petstore.entity.Pet;
 import com.petstore.exception.InvalidStatusException;
@@ -10,17 +21,8 @@ import com.petstore.repository.CategoryRepository;
 import com.petstore.repository.PetRepository;
 import com.petstore.service.PetService;
 import jakarta.persistence.EntityNotFoundException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This implementation of {@link PetService} provides methods for managing pets.
@@ -30,9 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
 
-    private final PetRepository petRepository;
-    private final CategoryRepository categoryRepository;
-    private final PetMapper petMapper;
     public static final String INVALID_STATUS_VALUE = "Invalid status value";
     public static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
     public static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
@@ -41,6 +40,9 @@ public class PetServiceImpl implements PetService {
     private static final String PET_UPDATED = "Pet with id '%d' updated.";
     private static final String PET_DELETED = "Pet with id '%d' deleted.";
     private static final String IMAGE_UPLOADED = "Image for pet with id '%d' uploaded.";
+    private final PetRepository petRepository;
+    private final CategoryRepository categoryRepository;
+    private final PetMapper petMapper;
 
     /**
      * {@inheritDoc}

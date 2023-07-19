@@ -2,19 +2,21 @@ package com.petstore.service.impl;
 
 import static java.lang.String.format;
 
+import java.util.List;
+
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.petstore.dto.UserDto;
 import com.petstore.entity.User;
 import com.petstore.mapper.UserMapper;
 import com.petstore.repository.UserRepository;
 import com.petstore.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This implementation of {@link UserService} provides methods for managing user accounts.
@@ -24,10 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
-
-    private final UserRepository userRepository;
-
     public static final String USER_NOT_FOUND = "User with username '%s' not found.";
     public static final String USER_ALREADY_EXIST = "User with username '%s' or email '%s' already exists.";
     public static final String SOME_USER_ALREADY_EXIST = "Some user already exist.";
@@ -35,6 +33,8 @@ public class UserServiceImpl implements UserService {
     private static final String USER_SAVED = "User with username '%s' saved.";
     private static final String USER_UPDATED = "User with username '%s' updated.";
     private static final String USER_DELETED = "User with username '%s' deleted.";
+    private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
     /**
      * {@inheritDoc}

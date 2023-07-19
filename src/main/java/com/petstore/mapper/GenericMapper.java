@@ -2,11 +2,12 @@ package com.petstore.mapper;
 
 import static java.util.stream.Collectors.toList;
 
-import com.petstore.dto.BaseDto;
-import com.petstore.entity.BaseEntity;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.petstore.dto.BaseDto;
+import com.petstore.entity.BaseEntity;
 
 public interface GenericMapper<D extends BaseDto, E extends BaseEntity> {
     E toEntity(D dto);

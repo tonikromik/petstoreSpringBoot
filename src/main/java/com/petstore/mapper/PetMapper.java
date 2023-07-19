@@ -1,11 +1,12 @@
 package com.petstore.mapper;
 
-import com.petstore.dto.PetDto;
-import com.petstore.entity.Pet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
+
+import com.petstore.dto.PetDto;
+import com.petstore.entity.Pet;
 
 @Mapper(componentModel = "spring", uses = {TagMapper.class, CategoryMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE)

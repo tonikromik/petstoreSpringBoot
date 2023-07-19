@@ -1,8 +1,10 @@
 package com.petstore.service;
 
-import com.petstore.dto.UserDto;
 import java.util.List;
+
 import org.springframework.dao.DataAccessException;
+
+import com.petstore.dto.UserDto;
 
 /**
  * The UserService interface defines methods for managing user accounts.
@@ -27,7 +29,7 @@ public interface UserService {
     /**
      * Updates the details of an existing user.
      *
-     * @param userDto  the data transfer object containing the updated user details
+     * @param userDto the data transfer object containing the updated user details
      */
     UserDto updateUser(UserDto userDto);
 

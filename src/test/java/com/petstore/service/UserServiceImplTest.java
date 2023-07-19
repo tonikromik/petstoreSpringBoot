@@ -1,25 +1,21 @@
 package com.petstore.service;
 
-import static com.petstore.service.impl.UserServiceImpl.SOME_USER_ALREADY_EXIST;
-import static com.petstore.service.impl.UserServiceImpl.USER_ALREADY_EXIST;
-import static com.petstore.service.impl.UserServiceImpl.USER_NOT_FOUND;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_FOR_UPDATE;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_LIST;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_LIST;
+import static com.petstore.service.impl.UserServiceImpl.*;
+import static com.petstore.testdatafactory.UserTestFactory.*;
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.anyList;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.petstore.dto.UserDto;
 import com.petstore.entity.User;
@@ -27,13 +23,6 @@ import com.petstore.mapper.UserMapper;
 import com.petstore.repository.UserRepository;
 import com.petstore.service.impl.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {

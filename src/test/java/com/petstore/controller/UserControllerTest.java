@@ -1,24 +1,16 @@
 package com.petstore.controller;
 
 import static com.petstore.controller.UserController.USERNAME_EXCEPTION;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_FOR_CREATE;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_FOR_UPDATE;
-import static com.petstore.testdatafactory.UserTestFactory.TEST_USER_DTO_LIST_FOR_CREATE;
+import static com.petstore.testdatafactory.UserTestFactory.*;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import com.petstore.dto.UserDto;
-import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +18,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
+
+import com.petstore.dto.UserDto;
+import jakarta.validation.constraints.NotNull;
 
 @SpringBootTest
 @DirtiesContext

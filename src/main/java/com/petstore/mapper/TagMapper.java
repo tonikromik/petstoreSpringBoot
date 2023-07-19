@@ -1,9 +1,10 @@
 package com.petstore.mapper;
 
-import com.petstore.dto.TagDto;
-import com.petstore.entity.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import com.petstore.dto.TagDto;
+import com.petstore.entity.Tag;
 
 @Mapper(componentModel = "spring", uses = {PetMapper.class})
 public interface TagMapper extends GenericMapper<TagDto, Tag> {

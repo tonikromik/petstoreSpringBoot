@@ -4,27 +4,24 @@ import static com.petstore.service.impl.StoreServiceImpl.ORDER_NOT_FOUND;
 import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER;
 import static com.petstore.testdatafactory.StoreTestFactory.TEST_ORDER_DTO;
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.petstore.dto.OrderDto;
 import com.petstore.mapper.OrderMapper;
 import com.petstore.repository.StoreRepository;
 import com.petstore.service.impl.StoreServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceImplTest {
