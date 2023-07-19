@@ -1,0 +1,59 @@
+name: Build Project and Push Docker Image
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+jobs:
+  build_project_and_push_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set project version
+        run: |
+          PROJECT_VERSION=$(git describe --tags --abbrev=0)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          echo $PROJECT_VERSION
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Build with Gradle
+        run: |
+          gradle clean build -Pversion="$PROJECT_VERSION"
+          find build/libs -name "petstore*.jar"
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v2
+        with:
+          registry: docker.io
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_TOKEN }}
+
+      - name: Build and push the Docker image
+        if: github.event_name == 'pull_request'
+        env:
+          PROJECT_VERSION: ${{ env.PROJECT_VERSION }}
+        run: |
+          docker build . --build-arg PROJECT_VERSION=$PROJECT_VERSION --tag ${{ env.DOCKER_USERNAME }}/petstore:$PROJECT_VERSION
+          docker push ${{ env.DOCKER_USERNAME }}/petstore:$PROJECT_VERSION
+
+      - name: Build and push the Docker image latest
+        if: github.event_name == 'push'
+        env:
+          PROJECT_VERSION: ${{ env.PROJECT_VERSION }}
+        run: |
+          docker build . --build-arg PROJECT_VERSION=$PROJECT_VERSION --tag ${{ env.DOCKER_USERNAME }}/petstore:latest
+          docker push ${{ env.DOCKER_USERNAME }}/petstore:latest

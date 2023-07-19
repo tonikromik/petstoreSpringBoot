@@ -17,10 +17,13 @@ updating, and retrieving pet information. It also provides functionality for man
 - SpringDoc 2.1.0.
 
 ### Setup
+1. Local:
 - clone or download in ZIP format directory on your local machine from https://github.com/tonikromik/petstoreSpringBoot.git
 - import a project to IDE and run PetstoreApplication.java 
 or use ``` ./gradlew bootRun ``` from project folder
 - open a web browser and navigate to http://localhost:8080/swagger-ui/index.html
+2. You can also test this app navigating to http://23.21.28.163:8080/swagger-ui/index.html). 
+After each commit project is automatically deployed to the AVS server.
 
 
 Using the Open API UI, you can interact with the Petstore server API by making requests and receiving responses in real-time. 
