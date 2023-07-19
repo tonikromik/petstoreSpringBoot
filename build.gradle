@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "${org_springframework_boot}"
+	id 'io.spring.dependency-management' version "${io_spring_dependency_management}"
+}
+
+group = 'com'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = "${source_compatibility}"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-web:${spring_boot_starter_web}"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${spring_boot_starter_data_jpa}"
+	implementation "org.springframework.boot:spring-boot-starter-validation:${spring_boot_starter_validation}"
+	implementation "org.springframework.boot:spring-boot-starter-security:${spring_boot_starter_security}"
+	implementation "io.jsonwebtoken:jjwt-api:${jjwt_api}"
+	implementation "org.flywaydb:flyway-core:${flyway_core}"
+	implementation "org.flywaydb:flyway-mysql:${flyway_mysql}"
+	implementation "org.mapstruct:mapstruct:${mapstruct}"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_openapi_starter_webmvc_ui}"
+
+	compileOnly "org.projectlombok:lombok:${lombok}"
+
+	runtimeOnly "com.mysql:mysql-connector-j:${mysql_connector_j}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwt_impl}"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwt_jackson}"
+
+	annotationProcessor "org.projectlombok:lombok:${lombok}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_processor}"
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombok_mapstruct_binding}"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test:${spring_boot_starter_test}"
+	testImplementation "org.springframework.security:spring-security-test:${spring_security_test}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+
+	reports {
+		html.getRequired().set true;
+	}
+}

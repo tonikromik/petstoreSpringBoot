@@ -7,7 +7,7 @@ updating, and retrieving pet information. It also provides functionality for man
 ### Technologies
 - JDK 17;
 - Spring Boot 3.1.0;
-- Maven 3.9.1;
+- Gradle 8.1.1;
 - Spring Boot Starter Web 3.1.0;
 - Spring Boot Starter Data JPA 3.1.0;
 - MySQL Connector/J 8.0.32;
@@ -19,7 +19,7 @@ updating, and retrieving pet information. It also provides functionality for man
 ### Setup
 - clone or download in ZIP format directory on your local machine from https://github.com/tonikromik/petstoreSpringBoot.git
 - import a project to IDE and run PetstoreApplication.java 
-or use ``` mvn spring-boot:run ``` from project folder
+or use ``` ./gradlew bootRun ``` from project folder
 - open a web browser and navigate to http://localhost:8080/swagger-ui/index.html
 
 

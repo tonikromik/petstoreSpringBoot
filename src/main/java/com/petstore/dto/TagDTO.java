@@ -26,5 +26,6 @@ public class TagDTO extends BaseDTO {
     private String name;
 
     @JsonIgnore
+    @Builder.Default
     private List<Pet> pets = new ArrayList<>();
 }
