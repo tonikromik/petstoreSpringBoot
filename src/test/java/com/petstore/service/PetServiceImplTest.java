@@ -1,23 +1,5 @@
 package com.petstore.service;
 
-import com.petstore.dto.PetDTO;
-import com.petstore.entity.Pet;
-import com.petstore.exception.InvalidStatusException;
-import com.petstore.mapper.PetMapper;
-import com.petstore.mapper.TagMapper;
-import com.petstore.repository.CategoryRepository;
-import com.petstore.repository.PetRepository;
-import com.petstore.service.impl.PetServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
-
 import static com.petstore.entity.Pet.Status.valueOf;
 import static com.petstore.service.impl.PetServiceImpl.CATEGORY_NOT_FOUND;
 import static com.petstore.service.impl.PetServiceImpl.INVALID_STATUS_VALUE;
@@ -26,6 +8,25 @@ import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.petstore.dto.PetDto;
+import com.petstore.entity.Pet;
+import com.petstore.exception.InvalidStatusException;
+import com.petstore.mapper.PetMapper;
+import com.petstore.mapper.TagMapper;
+import com.petstore.repository.CategoryRepository;
+import com.petstore.repository.PetRepository;
+import com.petstore.service.impl.PetServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class PetServiceImplTest {
@@ -41,15 +42,15 @@ public class PetServiceImplTest {
     private PetServiceImpl petService;
 
     @Test
-    public void findById_ReturnPetDTO() {
+    public void findById_ReturnPetDto() {
         when(petRepository.findById(1L)).thenReturn(Optional.of(test_pet));
-        when(petMapper.toDTO(any(Pet.class))).thenReturn(TEST_PET_DTO);
+        when(petMapper.toDto(any(Pet.class))).thenReturn(TEST_PET_DTO);
 
-        PetDTO returnedPetDTO = petService.findById(1L);
+        PetDto returnedPetDto = petService.findById(1L);
 
         verify(petRepository).findById(1L);
-        assertNotNull(returnedPetDTO);
-        assertEquals(TEST_PET_DTO, returnedPetDTO);
+        assertNotNull(returnedPetDto);
+        assertEquals(TEST_PET_DTO, returnedPetDto);
     }
 
     @Test
@@ -65,11 +66,11 @@ public class PetServiceImplTest {
     }
 
     @Test
-    public void findPetsByStatus_ReturnListPetDTOs() {
+    public void findPetsByStatus_ReturnListPetDtos() {
         when(petRepository.findAllByStatus(valueOf("PENDING"))).thenReturn(TEST_PETS);
-        when(petMapper.toListDTOs(TEST_PETS)).thenReturn(TEST_PET_DTOS);
+        when(petMapper.toListDtos(TEST_PETS)).thenReturn(TEST_PET_DTOS);
 
-        List<PetDTO> petsByStatus = petService.findPetsByStatus("PENDING");
+        List<PetDto> petsByStatus = petService.findPetsByStatus("PENDING");
 
         assertNotNull(petsByStatus);
         assertEquals(TEST_PET_DTOS, petsByStatus);
@@ -85,17 +86,17 @@ public class PetServiceImplTest {
     }
 
     @Test
-    public void addPet_ThenReturnPetDTO() {
+    public void addPet_ThenReturnPetDto() {
         when(petMapper.toEntity(TEST_PET_DTO)).thenReturn(test_pet);
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(test_pet.getCategory()));
         when(petRepository.save(test_pet)).thenReturn(test_pet);
-        when(petMapper.toDTO(test_pet)).thenReturn(TEST_PET_DTO);
+        when(petMapper.toDto(test_pet)).thenReturn(TEST_PET_DTO);
 
-        PetDTO addedPetDTO = petService.addPet(TEST_PET_DTO);
+        PetDto addedPetDto = petService.addPet(TEST_PET_DTO);
 
         verify(petRepository).save(test_pet);
-        assertNotNull(addedPetDTO);
-        assertEquals(TEST_PET_DTO, addedPetDTO);
+        assertNotNull(addedPetDto);
+        assertEquals(TEST_PET_DTO, addedPetDto);
     }
 
     @Test
@@ -111,27 +112,27 @@ public class PetServiceImplTest {
     }
 
     @Test
-    public void updatePet_ReturnPetDTO() {
+    public void updatePet_ReturnPetDto() {
         when(petRepository.findById(anyLong())).thenReturn(Optional.of(test_pet));
-        when(petMapper.toDTO(test_pet)).thenReturn(TEST_PET_DTO);
+        when(petMapper.toDto(test_pet)).thenReturn(TEST_PET_DTO);
 
-        PetDTO updatedPet = petService.updatePet(TEST_PET_DTO);
+        PetDto updatedPet = petService.updatePet(TEST_PET_DTO);
         verify(petMapper).updateProperties(TEST_PET_DTO, test_pet);
-        verify(petMapper).toDTO(test_pet);
+        verify(petMapper).toDto(test_pet);
         assertEquals(TEST_PET_DTO, updatedPet);
     }
 
     @Test
-    public void updatePetInTheStoreById_ReturnPetDTO() {
+    public void updatePetInTheStoreById_ReturnPetDto() {
         when(petRepository.findById(anyLong())).thenReturn(Optional.of(test_pet));
-        when(petMapper.toDTO(test_pet)).thenReturn(TEST_PET_DTO_UPDATED);
+        when(petMapper.toDto(test_pet)).thenReturn(TEST_PET_DTO_UPDATED);
 
         String updatedName = "Alisa";
         String updatedStatus = "PENDING";
 
-        PetDTO updated = petService.updatePetInTheStoreById(1L, updatedName, updatedStatus);
+        PetDto updated = petService.updatePetInTheStoreById(1L, updatedName, updatedStatus);
 
-        verify(petMapper).toDTO(test_pet);
+        verify(petMapper).toDto(test_pet);
         assertEquals(updatedName, updated.getName());
         assertEquals(Pet.Status.PENDING, updated.getStatus());
     }

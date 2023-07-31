@@ -1,5 +1,8 @@
 package com.petstore.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.petstore.entity.Pet;
 import com.petstore.validation.OnCreate;
 import com.petstore.validation.OnUpdate;
@@ -9,16 +12,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "Pet")
-public class PetDTO extends BaseDTO {
+public class PetDto extends BaseDto {
 
     @Null(groups = OnCreate.class, message = "id must be null")
     @NotNull(groups = OnUpdate.class, message = "id is required")
@@ -28,14 +28,14 @@ public class PetDTO extends BaseDTO {
     private String name;
 
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Category is required")
-    private CategoryDTO category;
+    private CategoryDto category;
 
     @Builder.Default
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Urls are required")
     private Set<String> photoUrls = new HashSet<>();
 
     @Builder.Default
-    private Set<TagDTO> tags = new HashSet<>();
+    private Set<TagDto> tags = new HashSet<>();
 
     @Null(groups = OnCreate.class)
     @NotNull(groups = OnUpdate.class, message = "Status is required")

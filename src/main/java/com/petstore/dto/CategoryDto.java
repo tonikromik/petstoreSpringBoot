@@ -1,5 +1,8 @@
 package com.petstore.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petstore.entity.Pet;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,16 +10,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "Category")
-public class CategoryDTO extends BaseDTO {
+public class CategoryDto extends BaseDto {
 
     @NotNull
     private Long id;

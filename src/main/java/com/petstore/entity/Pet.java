@@ -1,16 +1,16 @@
 package com.petstore.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.*;
-import static jakarta.persistence.GenerationType.*;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -55,6 +55,7 @@ public class Pet extends BaseEntity {
 
     @OneToMany(mappedBy = "pet", cascade = {PERSIST, MERGE, REMOVE})
     private List<Order> orders;
+
     public enum Status {
         AVAILABLE,
         PENDING,

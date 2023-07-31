@@ -1,29 +1,30 @@
 package com.petstore.service;
 
-import com.petstore.dto.PetDTO;
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.petstore.dto.PetDto;
 
 /**
  * The PetService interface defines methods for managing pets.
  */
 public interface PetService {
     /**
-     * Adds a new pet based on the provided {@link PetDTO} PetDTO object.
+     * Adds a new pet based on the provided {@link PetDto} PetDTO object.
      *
-     * @param petDTO The PetDTO object representing the pet to be added.
+     * @param petDto The PetDTO object representing the pet to be added.
      * @return The PetDTO object representing the added pet.
      */
-    PetDTO addPet(PetDTO petDTO);
+    PetDto addPet(PetDto petDto);
 
     /**
      * Updates the pet with the provided information.
      *
-     * @param petDTO The PetDTO object containing the updated information for the pet.
+     * @param petDto The PetDTO object containing the updated information for the pet.
      */
 
-    PetDTO updatePet(PetDTO petDTO);
+    PetDto updatePet(PetDto petDto);
 
     /**
      * Finds a pet by id.
@@ -31,7 +32,7 @@ public interface PetService {
      * @param id the id of the pet to be found
      * @return the data transfer object containing the pet details, or null if not found
      */
-    PetDTO findById(Long id);
+    PetDto findById(Long id);
 
     /**
      * Finds a pet by status.
@@ -39,7 +40,7 @@ public interface PetService {
      * @param status the status of the pet to be found
      * @return the data transfer object containing the pet details, or null if not found
      */
-    List<PetDTO> findPetsByStatus(String status);
+    List<PetDto> findPetsByStatus(String status);
 
     /**
      * Updates the pet in the store with the specified ID.
@@ -48,7 +49,7 @@ public interface PetService {
      * @param name   The new name for the pet.
      * @param status The new status for the pet.
      */
-    PetDTO updatePetInTheStoreById(Long id, String name, String status);
+    PetDto updatePetInTheStoreById(Long id, String name, String status);
 
     /**
      * Deletes the pet from the store with the specified ID.

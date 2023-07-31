@@ -6,7 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -14,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "User")
-public class UserDTO extends BaseDTO{
+public class UserDto extends BaseDto {
 
     @Null(groups = OnCreate.class, message = "id must be null")
     @NotNull(groups = OnUpdate.class, message = "id is required")

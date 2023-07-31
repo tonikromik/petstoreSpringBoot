@@ -1,6 +1,19 @@
 package com.petstore.service.impl;
 
-import com.petstore.dto.PetDTO;
+import static java.lang.String.format;
+
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.petstore.dto.PetDto;
 import com.petstore.entity.Pet;
 import com.petstore.exception.InvalidStatusException;
 import com.petstore.mapper.PetMapper;
@@ -10,18 +23,6 @@ import com.petstore.service.PetService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-
-import static java.lang.String.format;
 
 /**
  * This implementation of {@link PetService} provides methods for managing pets.
@@ -31,9 +32,6 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
 
-    private final PetRepository petRepository;
-    private final CategoryRepository categoryRepository;
-    private final PetMapper petMapper;
     public static final String INVALID_STATUS_VALUE = "Invalid status value";
     public static final String PET_NOT_FOUND = "Pet with id '%d' not found.";
     public static final String CATEGORY_NOT_FOUND = "Category with id '%d' not found.";
@@ -42,14 +40,17 @@ public class PetServiceImpl implements PetService {
     private static final String PET_UPDATED = "Pet with id '%d' updated.";
     private static final String PET_DELETED = "Pet with id '%d' deleted.";
     private static final String IMAGE_UPLOADED = "Image for pet with id '%d' uploaded.";
+    private final PetRepository petRepository;
+    private final CategoryRepository categoryRepository;
+    private final PetMapper petMapper;
 
     /**
      * {@inheritDoc}
      */
     @Transactional(readOnly = true)
     @Override
-    public PetDTO findById(Long id) {
-        return petMapper.toDTO(petRepository.findById(id)
+    public PetDto findById(Long id) {
+        return petMapper.toDto(petRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, id))));
     }
 
@@ -58,9 +59,9 @@ public class PetServiceImpl implements PetService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<PetDTO> findPetsByStatus(String status) {
+    public List<PetDto> findPetsByStatus(String status) {
         try {
-            return petMapper.toListDTOs(petRepository.findAllByStatus(Pet.Status.valueOf(status.toUpperCase())));
+            return petMapper.toListDtos(petRepository.findAllByStatus(Pet.Status.valueOf(status.toUpperCase())));
         } catch (IllegalArgumentException e) {
             log.error(INVALID_STATUS_VALUE);
             throw new InvalidStatusException(INVALID_STATUS_VALUE);
@@ -72,14 +73,14 @@ public class PetServiceImpl implements PetService {
      */
     @Transactional
     @Override
-    public PetDTO addPet(PetDTO petDTO) {
-        var pet = petMapper.toEntity(petDTO);
+    public PetDto addPet(PetDto petDto) {
+        var pet = petMapper.toEntity(petDto);
         var category = categoryRepository.findById(pet.getCategory().getId())
                 .orElseThrow(() -> new EntityNotFoundException(format(CATEGORY_NOT_FOUND, pet.getCategory().getId())));
         pet.setCategory(category);
         Pet saved = petRepository.save(pet);
         log.info(format(PET_ADDED, saved.getId()));
-        return petMapper.toDTO(saved);
+        return petMapper.toDto(saved);
     }
 
     /**
@@ -87,12 +88,12 @@ public class PetServiceImpl implements PetService {
      */
     @Transactional
     @Override
-    public PetDTO updatePet(PetDTO petDTO) {
-        var pet = petRepository.findById(petDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, petDTO.getId())));
-        petMapper.updateProperties(petDTO, pet);
+    public PetDto updatePet(PetDto petDto) {
+        var pet = petRepository.findById(petDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, petDto.getId())));
+        petMapper.updateProperties(petDto, pet);
         log.info(format(PET_UPDATED, pet.getId()));
-        return petMapper.toDTO(pet);
+        return petMapper.toDto(pet);
     }
 
     /**
@@ -100,7 +101,7 @@ public class PetServiceImpl implements PetService {
      */
     @Transactional
     @Override
-    public PetDTO updatePetInTheStoreById(Long id, String name, String status) {
+    public PetDto updatePetInTheStoreById(Long id, String name, String status) {
         Pet petForUpdate = petRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(format(PET_NOT_FOUND, id)));
         if (name != null) {
@@ -110,7 +111,7 @@ public class PetServiceImpl implements PetService {
             petForUpdate.setStatus(Pet.Status.valueOf(status.toUpperCase()));
         }
         log.info(format(PET_UPDATED, petForUpdate.getId()));
-        return petMapper.toDTO(petForUpdate);
+        return petMapper.toDto(petForUpdate);
     }
 
     /**

@@ -1,12 +1,12 @@
 package com.petstore.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import static com.petstore.entity.Order.Status;
 
 import java.time.LocalDateTime;
 
-import static com.petstore.entity.Order.Status;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,13 +14,13 @@ import static com.petstore.entity.Order.Status;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "Order")
-public class OrderDTO extends BaseDTO {
+public class OrderDto extends BaseDto {
 
     private Long id;
 
     @Schema(name = "pet")
     @NotNull
-    private PetDTO pet;
+    private PetDto pet;
 
     @NotNull
     private Integer quantity;

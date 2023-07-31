@@ -1,17 +1,18 @@
 package com.petstore.controller;
 
+import java.io.IOException;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.petstore.service.impl.AuthenticationServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-public class AuthController implements AuthControllerOpenApiWrapper{
+public class AuthController implements AuthControllerOpenApiWrapper {
     private final AuthenticationServiceImpl authService;
 
     @PostMapping("/login")

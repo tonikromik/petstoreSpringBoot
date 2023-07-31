@@ -1,16 +1,17 @@
 package com.petstore.controller;
 
-import com.petstore.dto.OrderDTO;
-import com.petstore.dto.PetDTO;
-import com.petstore.dto.UserDTO;
+import static java.lang.String.format;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.List;
-
-import static java.lang.String.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import com.petstore.dto.OrderDto;
+import com.petstore.dto.PetDto;
+import com.petstore.dto.UserDto;
 
 @Component
 public class WebServiceTestClient {
@@ -18,12 +19,12 @@ public class WebServiceTestClient {
     @Autowired
     private WebTestClient webTestClient;
 
-    public WebTestClient.ResponseSpec saveOrder(OrderDTO orderDTO) {
+    public WebTestClient.ResponseSpec saveOrder(OrderDto orderDto) {
         return this.webTestClient.post()
                 .uri("/store/order")
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .bodyValue(orderDTO)
+                .bodyValue(orderDto)
                 .exchange();
     }
 
@@ -39,12 +40,12 @@ public class WebServiceTestClient {
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec createUser(UserDTO userDTO) {
+    public WebTestClient.ResponseSpec createUser(UserDto userDto) {
         return this.webTestClient.post()
                 .uri("/user")
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .bodyValue(userDTO)
+                .bodyValue(userDto)
                 .exchange();
     }
 
@@ -54,13 +55,13 @@ public class WebServiceTestClient {
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec updateUser(String username, UserDTO userDTO) {
+    public WebTestClient.ResponseSpec updateUser(String username, UserDto userDto) {
 
         return this.webTestClient.put()
                 .uri("/user/" + username)
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .bodyValue(userDTO)
+                .bodyValue(userDto)
                 .exchange();
     }
 
@@ -70,29 +71,29 @@ public class WebServiceTestClient {
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec createUsersWithList(List<UserDTO> userDTOList) {
+    public WebTestClient.ResponseSpec createUsersWithList(List<UserDto> userDtoList) {
         return this.webTestClient.post()
                 .uri("/user/createWithList")
                 .contentType(APPLICATION_JSON)
-                .bodyValue(userDTOList)
+                .bodyValue(userDtoList)
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec addPet(PetDTO petDTO) {
+    public WebTestClient.ResponseSpec addPet(PetDto petDto) {
         return this.webTestClient.post()
                 .uri("/pet")
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .bodyValue(petDTO)
+                .bodyValue(petDto)
                 .exchange();
     }
 
-    public WebTestClient.ResponseSpec updateExistedPet(PetDTO petDTO) {
+    public WebTestClient.ResponseSpec updateExistedPet(PetDto petDto) {
         return this.webTestClient.put()
                 .uri("/pet")
                 .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .bodyValue(petDTO)
+                .bodyValue(petDto)
                 .exchange();
     }
 

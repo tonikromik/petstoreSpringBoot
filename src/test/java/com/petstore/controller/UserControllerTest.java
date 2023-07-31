@@ -1,7 +1,15 @@
 package com.petstore.controller;
 
-import com.petstore.dto.UserDTO;
-import jakarta.validation.constraints.NotNull;
+import static com.petstore.controller.UserController.USERNAME_EXCEPTION;
+import static com.petstore.testdatafactory.UserTestFactory.*;
+import static java.util.Objects.requireNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,15 +19,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 
-import java.util.ArrayList;
-
-import static com.petstore.controller.UserController.USERNAME_EXCEPTION;
-import static com.petstore.testdatafactory.UserTestFactory.*;
-import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import com.petstore.dto.UserDto;
+import jakarta.validation.constraints.NotNull;
 
 @SpringBootTest
 @DirtiesContext
@@ -38,7 +39,7 @@ public class UserControllerTest {
         serviceTestClient.createUser(TEST_USER_DTO_FOR_CREATE)
                 .expectStatus().isCreated()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(UserDTO.class)
+                .expectBody(UserDto.class)
                 .consumeWith(response ->
                         assertThat(requireNonNull(response.getResponseBody()).getId()).isEqualTo(8L));
     }
@@ -46,8 +47,8 @@ public class UserControllerTest {
     @Test
     @Order(2)
     public void shouldRejectUserCreatingForNotValidUser() {
-        var invalidUserDTO = new UserDTO();
-        serviceTestClient.createUser(invalidUserDTO)
+        var invalidUserDto = new UserDto();
+        serviceTestClient.createUser(invalidUserDto)
                 .expectStatus().isBadRequest();
     }
 
@@ -66,7 +67,7 @@ public class UserControllerTest {
         serviceTestClient.findUserByUsername(username)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(UserDTO.class)
+                .expectBody(UserDto.class)
                 .consumeWith(response -> {
                     var received = response.getResponseBody();
                     equals(received, TEST_USER_DTO);
@@ -107,7 +108,7 @@ public class UserControllerTest {
         serviceTestClient.updateUser(username, TEST_USER_DTO_FOR_UPDATE)
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody(UserDTO.class)
+                .expectBody(UserDto.class)
                 .consumeWith(response -> {
                     var received = response.getResponseBody();
                     equals(received, TEST_USER_DTO_FOR_UPDATE);
@@ -147,10 +148,10 @@ public class UserControllerTest {
     @Test
     @Order(12)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
-    public void shouldRejectUpdatingUserWithValidUsernameAndInvalidUserDTOWhenAuthorizedAsAdmin() {
+    public void shouldRejectUpdatingUserWithValidUsernameAndInvalidUserDtoWhenAuthorizedAsAdmin() {
         var username = "user";
-        var userDTO = UserDTO.builder().userName("user").build();
-        serviceTestClient.updateUser(username, userDTO)
+        var userDto = UserDto.builder().userName("user").build();
+        serviceTestClient.updateUser(username, userDto)
                 .expectStatus().isBadRequest();
     }
 
@@ -192,8 +193,8 @@ public class UserControllerTest {
     @Order(17)
     @WithMockUser(username = "user", authorities = "ROLE_ADMIN")
     public void shouldRejectCreatingUsersWithInvalidListWhenAuthorizedAsAdmin() {
-        var userDTOList = new ArrayList<UserDTO>();
-        serviceTestClient.createUsersWithList(userDTOList)
+        var userDtoList = new ArrayList<UserDto>();
+        serviceTestClient.createUsersWithList(userDtoList)
                 .expectStatus().isBadRequest();
     }
 
@@ -212,7 +213,7 @@ public class UserControllerTest {
                 .expectStatus().isBadRequest();
     }
 
-    private void equals(UserDTO received, @NotNull UserDTO expected) {
+    private void equals(UserDto received, @NotNull UserDto expected) {
         assertThat(received).isNotNull();
         assertThat(received.getId()).isEqualTo(expected.getId());
         assertThat(received.getUserName()).isEqualTo(expected.getUserName());

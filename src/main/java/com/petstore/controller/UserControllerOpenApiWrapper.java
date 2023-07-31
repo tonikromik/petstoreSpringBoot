@@ -1,6 +1,12 @@
 package com.petstore.controller;
 
-import com.petstore.dto.UserDTO;
+import java.util.List;
+
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.petstore.dto.UserDto;
 import com.petstore.validation.OnCreate;
 import com.petstore.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,11 +18,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Tag(name = "user", description = "Operations about user")
 public interface UserControllerOpenApiWrapper {
@@ -25,7 +26,7 @@ public interface UserControllerOpenApiWrapper {
             tags = {"user"},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Created user object",
-                    content = @Content(schema = @Schema(implementation = UserDTO.class),
+                    content = @Content(schema = @Schema(implementation = UserDto.class),
                             examples = {@ExampleObject(value = """
                                          {
                                              "userName": "User20",
@@ -43,7 +44,7 @@ public interface UserControllerOpenApiWrapper {
             }
     )
     @Validated(OnCreate.class)
-    UserDTO createUser(@Valid @RequestBody UserDTO userDTO);
+    UserDto createUser(@Valid @RequestBody UserDto userDto);
 
     @Operation(summary = "Get user by username",
             parameters = {
@@ -52,13 +53,13 @@ public interface UserControllerOpenApiWrapper {
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation",
-                            content = @Content(schema = @Schema(implementation = UserDTO.class))),
+                            content = @Content(schema = @Schema(implementation = UserDto.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
             },
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
-    UserDTO findUserByUsername(@PathVariable String username);
+    UserDto findUserByUsername(@PathVariable String username);
 
     @Operation(summary = "Updated user",
             description = "This can only be done by the logged in user.",
@@ -68,18 +69,18 @@ public interface UserControllerOpenApiWrapper {
             },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Updated user object",
-                    content = @Content(schema = @Schema(implementation = UserDTO.class))
+                    content = @Content(schema = @Schema(implementation = UserDto.class))
             ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation",
-                            content = @Content(schema = @Schema(implementation = UserDTO.class))),
+                            content = @Content(schema = @Schema(implementation = UserDto.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
             },
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
     @Validated(OnUpdate.class)
-    UserDTO updateUser(@PathVariable String username, @Valid @RequestBody UserDTO userDTO);
+    UserDto updateUser(@PathVariable String username, @Valid @RequestBody UserDto userDto);
 
     @Operation(summary = "Delete user",
             description = "This can only be done by the logged in user.",
@@ -99,7 +100,7 @@ public interface UserControllerOpenApiWrapper {
             tags = {"user"},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "List of user object",
-                    content = @Content(schema = @Schema(implementation = UserDTO.class),
+                    content = @Content(schema = @Schema(implementation = UserDto.class),
                             examples = {@ExampleObject(value = """
                                     [
                                          {
@@ -129,5 +130,5 @@ public interface UserControllerOpenApiWrapper {
             security = {@SecurityRequirement(name = "BearerAuth")}
     )
     @Validated(OnCreate.class)
-    void createUsersWithList(@Valid @RequestBody List<@Valid UserDTO> userDTOList);
+    void createUsersWithList(@Valid @RequestBody List<@Valid UserDto> userDtoList);
 }

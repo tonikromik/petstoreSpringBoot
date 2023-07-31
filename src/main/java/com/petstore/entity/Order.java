@@ -1,13 +1,13 @@
 package com.petstore.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
-
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "orders")
-public class Order extends BaseEntity{
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "orders_seq")
     @SequenceGenerator(name = "orders_seq", sequenceName = "orders_seq", initialValue = 5)

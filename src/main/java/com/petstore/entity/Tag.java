@@ -1,12 +1,12 @@
 package com.petstore.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.*;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
